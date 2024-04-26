@@ -5,6 +5,9 @@ LiquidCrystal_I2C lcd(0x27,16,2);  // I2C address: 0x27 | LCD: 16x2
 const int pumpOutputPin = D5;
 bool pumpOutput = LOW;
 
+const int buttonInputPin = D6;
+unsigned buttonInput = 0;
+
 void setup() {
   delay(100);
   Serial.begin(115200);
@@ -13,13 +16,15 @@ void setup() {
 
   lcdInit();
   pumpOutputInit();
+  buttonInputInit();
 }
 
 void loop() {
-  pumpOn();
-  delay(200);
-  pumpOff();
-  delay(200);
+  buttonInput = digitalRead(buttonInputPin);
+  if(buttonInput)
+    pumpOn();
+  else
+    pumpOff();
 }
 
 void lcdInit()
@@ -62,4 +67,10 @@ void pumpSet(bool v)
     pumpOutput = v;
     digitalWrite(pumpOutputPin, pumpOutput);
   }
+}
+
+void buttonInputInit()
+{
+  Serial.println("Button Input Initialization");
+  pinMode(buttonInputPin, INPUT);
 }
