@@ -25,6 +25,8 @@ void loop() {
     pumpOn();
   else
     pumpOff();
+
+  lcdUpdate();
 }
 
 void lcdInit()
@@ -38,6 +40,9 @@ void lcdInit()
   lcd.print("     SYSTEM     ");
   delay(2000);
   lcd.clear();
+
+  lcd.setCursor(0,0);
+  lcd.print("Pump: ");
 }
 
 void pumpOutputInit()
@@ -73,4 +78,10 @@ void buttonInputInit()
 {
   Serial.println("Button Input Initialization");
   pinMode(buttonInputPin, INPUT);
+}
+
+void lcdUpdate()
+{
+  lcd.setCursor(6, 0);
+  lcd.print(pumpOutput ? "On " : "Off");
 }
