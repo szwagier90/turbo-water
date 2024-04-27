@@ -9,6 +9,8 @@ const int sensorPin = A0;
 int sensorValue = 0;
 int soilMoisturePercent = 0;
 const int soilMoistureThreshold = 30;
+unsigned int soilMoistureMin = 10000;
+unsigned int soilMoistureMax = 0;
 
 const int buttonInputPin = D6;
 unsigned buttonInput = 0;
@@ -23,12 +25,19 @@ void setup() {
   pumpOutputInit();
   analogInputInit();
   buttonInputInit();
+  soilMoistureSensorInit();
 }
 
 void loop() {
   buttonInput = digitalRead(buttonInputPin);
   sensorValue = analogRead(sensorPin);
-  soilMoisturePercent = map(sensorValue, 16, 1024, 0, 100);
+
+  if (sensorValue < soilMoistureMin)
+    soilMoistureMin = sensorValue;
+  if (sensorValue > soilMoistureMax)
+    soilMoistureMax = sensorValue;
+
+  soilMoisturePercent = map(sensorValue, soilMoistureMax, soilMoistureMin, 0, 100);
 
   if(soilMoisturePercent < soilMoistureThreshold)
     pumpOn();
@@ -99,4 +108,13 @@ void lcdUpdate()
 {
   lcd.setCursor(6, 0);
   lcd.print(pumpOutput ? "On " : "Off");
+}
+
+void soilMoistureSensorInit()
+{
+  Serial.println("Soil Moisture Sensor Initialization");
+
+  sensorValue = analogRead(sensorPin);
+  soilMoistureMin = sensorValue;
+  soilMoistureMax = sensorValue + 1;
 }
