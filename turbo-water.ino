@@ -1,4 +1,5 @@
 #include "LiquidCrystal_I2C.h"
+#include "Pump.h"
 
 LiquidCrystal_I2C lcd(0x27,16,2);  // I2C address: 0x27 | LCD: 16x2
 
@@ -14,6 +15,8 @@ unsigned int soilMoistureMax = 0;
 
 const int buttonInputPin = D6;
 unsigned buttonInput = 0;
+
+Pump pump(pumpOutput);
 
 void setup() {
   delay(100);
@@ -40,10 +43,11 @@ void loop() {
   soilMoisturePercent = map(sensorValue, soilMoistureMax, soilMoistureMin, 0, 100);
 
   if(soilMoisturePercent < soilMoistureThreshold)
-    pumpOn();
+    pump.pumpOn();
   else
-    pumpOff();
+    pump.pumpOff();
 
+  digitalWrite(pumpOutputPin, pumpOutput);
   lcdUpdate();
 }
 
@@ -69,27 +73,6 @@ void pumpOutputInit()
 
   pinMode(pumpOutputPin, OUTPUT);
   digitalWrite(pumpOutputPin, LOW);
-}
-
-void pumpOn()
-{
-  pumpSet(HIGH);
-}
-
-void pumpOff()
-{
-  pumpSet(LOW);
-}
-
-void pumpSet(bool v)
-{
-  if(v != pumpOutput)
-  {
-    Serial.print("Pump: ");
-    Serial.println(v ? "On" : "Off");
-    pumpOutput = v;
-    digitalWrite(pumpOutputPin, pumpOutput);
-  }
 }
 
 void analogInputInit()
