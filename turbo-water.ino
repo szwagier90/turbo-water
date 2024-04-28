@@ -35,20 +35,30 @@ void loop() {
   buttonInput = digitalRead(buttonInputPin);
   sensorValue = analogRead(sensorPin);
 
+  calibration();
+  normal();
+
+  digitalWrite(pumpOutputPin, pumpOutput);
+  lcdUpdate();
+}
+
+void calibration()
+{
   if (sensorValue < soilMoistureMin)
     soilMoistureMin = sensorValue;
   if (sensorValue > soilMoistureMax)
     soilMoistureMax = sensorValue;
 
+}
+
+void normal()
+{
   soilMoisturePercent = map(sensorValue, soilMoistureMax, soilMoistureMin, 0, 100);
 
   if(soilMoisturePercent < soilMoistureThreshold)
     pump.pumpOn();
   else
     pump.pumpOff();
-
-  digitalWrite(pumpOutputPin, pumpOutput);
-  lcdUpdate();
 }
 
 void lcdInit()
