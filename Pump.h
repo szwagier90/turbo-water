@@ -7,9 +7,11 @@ public:
   void pumpOn();
   void pumpOff();
   void pumpSet(bool v);
+  bool isActivated();
 
 private:
   bool & pumpOutput;
+  bool activated;
 };
 
 #endif

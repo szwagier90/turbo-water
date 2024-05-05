@@ -22,6 +22,9 @@ unsigned int soilMoistureMax = 0;
 const int buttonInputPin = D6;
 unsigned buttonInput = 0;
 
+const unsigned long pumpActivationTime = 5000; // 5 seconds (adjust as needed)
+unsigned long pumpActivationStartTime = 0;
+
 Pump pump(pumpOutput);
 
 void setup() {
@@ -74,10 +77,16 @@ void normal()
 {
   soilMoisturePercent = map(sensorValue, soilMoistureMax, soilMoistureMin, 0, 100);
 
-  if(soilMoisturePercent < soilMoistureThreshold)
+  if(soilMoisturePercent < soilMoistureThreshold && !pump.isActivated())
+  {
     pump.pumpOn();
-  else
+    pumpActivationStartTime = millis();
+  }
+
+  if(pump.isActivated() && (millis() - pumpActivationStartTime >= pumpActivationTime))
+  {
     pump.pumpOff();
+  }
 }
 
 void lcdInit()
