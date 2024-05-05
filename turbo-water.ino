@@ -3,6 +3,12 @@
 
 LiquidCrystal_I2C lcd(0x27,16,2);  // I2C address: 0x27 | LCD: 16x2
 
+typedef enum { STATE_CALIBRATION,
+               STATE_NORMAL } States;
+
+// current state-machine state
+States state = STATE_CALIBRATION;
+
 const int pumpOutputPin = D5;
 bool pumpOutput = LOW;
 
@@ -35,20 +41,43 @@ void loop() {
   buttonInput = digitalRead(buttonInputPin);
   sensorValue = analogRead(sensorPin);
 
+  switch(state)
+  {
+    case STATE_CALIBRATION:
+      calibration();
+
+      if(buttonInput)
+      {
+        state = STATE_NORMAL;
+      }
+      break;
+    case STATE_NORMAL:
+      normal();
+      break;
+  }
+
+
+  digitalWrite(pumpOutputPin, pumpOutput);
+  lcdUpdate();
+}
+
+void calibration()
+{
   if (sensorValue < soilMoistureMin)
     soilMoistureMin = sensorValue;
   if (sensorValue > soilMoistureMax)
     soilMoistureMax = sensorValue;
 
+}
+
+void normal()
+{
   soilMoisturePercent = map(sensorValue, soilMoistureMax, soilMoistureMin, 0, 100);
 
   if(soilMoisturePercent < soilMoistureThreshold)
     pump.pumpOn();
   else
     pump.pumpOff();
-
-  digitalWrite(pumpOutputPin, pumpOutput);
-  lcdUpdate();
 }
 
 void lcdInit()
