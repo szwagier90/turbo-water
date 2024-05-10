@@ -19,7 +19,7 @@ const int soilMoistureThreshold = 30;
 unsigned int soilMoistureMin = 10000;
 unsigned int soilMoistureMax = 0;
 
-const int buttonInputPin = D6;
+const int buttonInputPin = D0;
 unsigned buttonInput = 0;
 
 const unsigned long pumpActivationTime = 5000; // 5 seconds (adjust as needed)
