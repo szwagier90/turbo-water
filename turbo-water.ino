@@ -1,4 +1,5 @@
 #include "LiquidCrystal_I2C.h"
+#include <Encoder.h>
 #include "Pump.h"
 
 LiquidCrystal_I2C lcd(0x27,16,2);  // I2C address: 0x27 | LCD: 16x2
@@ -28,6 +29,28 @@ unsigned long pumpActivationStartTime = 0;
 const unsigned long pumpIntervalTime = 10000; // 10 seconds
 unsigned long pumpLastActivationTime = 0;
 
+#define ENCODER_PIN_A D6
+#define ENCODER_PIN_B D7
+
+Encoder encoder(ENCODER_PIN_A, ENCODER_PIN_B);
+
+#define MENU_SIZE 2
+
+struct MenuItem {
+  String title;
+  String templ;
+};
+
+MenuItem menu[MENU_SIZE] = {
+  {"Moisture", "ADC:     |%:    "},
+  {"Pump State", "Pump:    "}
+};
+
+int currentMenuItem = -1; // Selected menu item index
+
+const unsigned long ADCViewUpdateInterval = 500; // 0.5 seconds
+unsigned long lastADCViewUpdateTime = 0;
+
 Pump pump(pumpOutput);
 
 void setup() {
@@ -46,6 +69,28 @@ void setup() {
 void loop() {
   buttonInput = digitalRead(buttonInputPin);
   sensorValue = analogRead(sensorPin);
+
+  int newMenuItem = (encoder.read() / 4) % MENU_SIZE;
+  if(newMenuItem < 0)
+  {
+    encoder.write((MENU_SIZE - 1) * 4);
+    newMenuItem = MENU_SIZE - 1;
+  }
+
+  if (currentMenuItem != newMenuItem)
+  {
+    currentMenuItem = newMenuItem;
+
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print(currentMenuItem+1);
+    lcd.print(": ");
+    lcd.print(menu[currentMenuItem].title);
+    lcd.setCursor(0, 1);
+    lcd.print(menu[currentMenuItem].templ);
+
+    lcdUpdate();
+  }
 
   switch(state)
   {
@@ -85,6 +130,7 @@ void normal()
     if(soilMoisturePercent < soilMoistureThreshold && !pump.isActivated())
     {
       pump.pumpOn();
+      lcdUpdate();
       pumpActivationStartTime = millis();
     }
   }
@@ -92,6 +138,7 @@ void normal()
   if(pump.isActivated() && (millis() - pumpActivationStartTime >= pumpActivationTime))
   {
     pump.pumpOff();
+    lcdUpdate();
     pumpLastActivationTime = millis();
   }
 }
@@ -134,8 +181,21 @@ void buttonInputInit()
 
 void lcdUpdate()
 {
-  lcd.setCursor(6, 0);
-  lcd.print(pumpOutput ? "On " : "Off");
+  if(0 == currentMenuItem)
+  {
+    if((millis()-lastADCViewUpdateTime) > ADCViewUpdateInterval)
+    {
+      lcd.setCursor(6, 1);
+      lcd.print(sensorValue);
+      lcd.setCursor(14, 1);
+      lcd.print(soilMoisturePercent);
+    }
+  }
+  else if(1 == currentMenuItem)
+  {
+    lcd.setCursor(6, 1);
+    lcd.print(pumpOutput ? "On " : "Off");
+  }
 }
 
 void soilMoistureSensorInit()
