@@ -10,35 +10,10 @@ public:
     int & currentMenuItem,
     int & sensorValue,
     int & soilMoisturePercent,
-    bool & pumpOutput) :
-      lcd(lcd),
-      currentMenuItem(currentMenuItem),
-      lastADCViewUpdateTime(0),
-      ADCViewUpdateInterval(500),
-      sensorValue(sensorValue),
-      soilMoisturePercent(soilMoisturePercent),
-      pumpOutput(pumpOutput)
-    {};
+    bool & pumpOutput
+  );
 
-  void lcdUpdate()
-  {
-
-    if(0 == currentMenuItem)
-    {
-      if((millis()-lastADCViewUpdateTime) > ADCViewUpdateInterval)
-      {
-        lcd.setCursor(5, 1);
-        lcd.print(sensorValue);
-        lcd.setCursor(13, 1);
-        lcd.print(soilMoisturePercent);
-      }
-    }
-    else if(1 == currentMenuItem)
-    {
-      lcd.setCursor(6, 1);
-      lcd.print(pumpOutput ? "On " : "Off");
-    }
-  }
+  void lcdUpdate();
 
 private:
   LiquidCrystal_I2C & lcd;
