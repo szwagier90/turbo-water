@@ -17,6 +17,7 @@ public:
 
 private:
   void sensorStatusView();
+  void pumpStatusView();
 
   LiquidCrystal_I2C & lcd;
 

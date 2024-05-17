@@ -23,8 +23,7 @@ void View::lcdUpdate()
   }
   else if(1 == currentMenuItem)
   {
-    lcd.setCursor(6, 1);
-    lcd.print(pumpOutput ? "On " : "Off");
+    pumpStatusView();
   }
 }
 
@@ -37,4 +36,10 @@ void View::sensorStatusView()
     lcd.setCursor(13, 1);
     lcd.print(soilMoisturePercent);
   }
+}
+
+void View::pumpStatusView()
+{
+  lcd.setCursor(6, 1);
+  lcd.print(pumpOutput ? "On " : "Off");
 }
