@@ -19,17 +19,22 @@ void View::lcdUpdate()
 {
   if(0 == currentMenuItem)
   {
-    if((millis()-lastADCViewUpdateTime) > ADCViewUpdateInterval)
-    {
-      lcd.setCursor(5, 1);
-      lcd.print(sensorValue);
-      lcd.setCursor(13, 1);
-      lcd.print(soilMoisturePercent);
-    }
+    sensorStatusView();
   }
   else if(1 == currentMenuItem)
   {
     lcd.setCursor(6, 1);
     lcd.print(pumpOutput ? "On " : "Off");
+  }
+}
+
+void View::sensorStatusView()
+{
+  if((millis()-lastADCViewUpdateTime) > ADCViewUpdateInterval)
+  {
+    lcd.setCursor(5, 1);
+    lcd.print(sensorValue);
+    lcd.setCursor(13, 1);
+    lcd.print(soilMoisturePercent);
   }
 }

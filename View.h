@@ -16,6 +16,8 @@ public:
   void lcdUpdate();
 
 private:
+  void sensorStatusView();
+
   LiquidCrystal_I2C & lcd;
 
   int & currentMenuItem;
