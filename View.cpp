@@ -17,13 +17,14 @@ View::View (
 
 void View::lcdUpdate()
 {
-  if(0 == currentMenuItem)
+  switch(currentMenuItem)
   {
+  case SENSOR_STATUS:
     sensorStatusView();
-  }
-  else if(1 == currentMenuItem)
-  {
+    break;
+  case PUMP_STATUS:
     pumpStatusView();
+    break;
   }
 }
 

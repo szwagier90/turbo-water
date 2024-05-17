@@ -5,6 +5,12 @@
 
 class View {
 public:
+  enum Menu
+  {
+    SENSOR_STATUS,
+    PUMP_STATUS,
+  };
+
   View (
     LiquidCrystal_I2C & lcd,
     int & currentMenuItem,
