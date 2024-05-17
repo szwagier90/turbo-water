@@ -1,6 +1,7 @@
 #include "LiquidCrystal_I2C.h"
 #include <Encoder.h>
 #include "Pump.h"
+#include "View.h"
 
 LiquidCrystal_I2C lcd(0x27,16,2);  // I2C address: 0x27 | LCD: 16x2
 
@@ -50,45 +51,7 @@ int currentMenuItem = -1; // Selected menu item index
 
 Pump pump(pumpOutput);
 
-class View {
-public:
-  View (
-    LiquidCrystal_I2C & lcd,
-    int & currentMenuItem) :
-      lcd(lcd),
-      currentMenuItem(currentMenuItem),
-      lastADCViewUpdateTime(0),
-      ADCViewUpdateInterval(500)
-    {};
-
-  void lcdUpdate()
-  {
-    if(0 == currentMenuItem)
-    {
-      if((millis()-lastADCViewUpdateTime) > ADCViewUpdateInterval)
-      {
-        lcd.setCursor(5, 1);
-        lcd.print(sensorValue);
-        lcd.setCursor(13, 1);
-        lcd.print(soilMoisturePercent);
-      }
-    }
-    else if(1 == currentMenuItem)
-    {
-      lcd.setCursor(6, 1);
-      lcd.print(pumpOutput ? "On " : "Off");
-    }
-  }
-
-private:
-  LiquidCrystal_I2C & lcd;
-
-  int & currentMenuItem;
-  unsigned long lastADCViewUpdateTime;
-  const unsigned long ADCViewUpdateInterval = 500; // 0.5 seconds
-};
-
-View v(lcd, currentMenuItem);
+View v(lcd, currentMenuItem, sensorValue, soilMoisturePercent, pumpOutput);
 
 void setup() {
   delay(100);
