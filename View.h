@@ -19,7 +19,6 @@ public:
   };
 
   View (
-    LiquidCrystal_I2C & lcd,
     int & newMenuItem,
     int & sensorValue,
     int & soilMoisturePercent,
@@ -34,7 +33,7 @@ private:
   void sensorStatusView();
   void pumpStatusView();
 
-  LiquidCrystal_I2C & lcd;
+  LiquidCrystal_I2C lcd;
 
   int & newMenuItem;
   size_t currentMenuItem;

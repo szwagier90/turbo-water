@@ -3,8 +3,6 @@
 #include "Pump.h"
 #include "View.h"
 
-LiquidCrystal_I2C lcd(0x27,16,2);  // I2C address: 0x27 | LCD: 16x2
-
 typedef enum { STATE_CALIBRATION,
                STATE_NORMAL } States;
 
@@ -39,7 +37,7 @@ int newMenuItem = -1;
 
 Pump pump(pumpOutput);
 
-View v(lcd, newMenuItem, sensorValue, soilMoisturePercent, pumpOutput);
+View v(newMenuItem, sensorValue, soilMoisturePercent, pumpOutput);
 
 void setup() {
   delay(100);
@@ -111,7 +109,6 @@ void normal()
   if(pump.isActivated() && (millis() - pumpActivationStartTime >= pumpActivationTime))
   {
     pump.pumpOff();
-    model.pumpOnOffState = false;
     v.lcdUpdate();
     pumpLastActivationTime = millis();
   }

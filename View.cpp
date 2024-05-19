@@ -8,12 +8,11 @@ MenuItem menu[MENU_SIZE] = {
 };
 
 View::View (
-  LiquidCrystal_I2C & lcd,
   int & newMenuItem,
   int & sensorValue,
   int & soilMoisturePercent,
   bool & pumpOutput) :
-    lcd(lcd),
+    lcd(0x27,16,2),  // I2C address: 0x27 | LCD: 16x2),
     newMenuItem(newMenuItem),
     currentMenuItem(-1),
     lastADCViewUpdateTime(0),
