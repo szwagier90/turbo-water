@@ -7,12 +7,13 @@ MenuItem menu[MENU_SIZE] = {
 
 View::View (
   LiquidCrystal_I2C & lcd,
-  int & currentMenuItem,
+  int & newMenuItem,
   int & sensorValue,
   int & soilMoisturePercent,
   bool & pumpOutput) :
     lcd(lcd),
-    currentMenuItem(currentMenuItem),
+    newMenuItem(newMenuItem),
+    currentMenuItem(-1),
     lastADCViewUpdateTime(0),
     ADCViewUpdateInterval(500),
     sensorValue(sensorValue),
@@ -33,6 +34,12 @@ void View::redrawMenu()
 
 void View::lcdUpdate()
 {
+  if (currentMenuItem != newMenuItem)
+  {
+    currentMenuItem = newMenuItem;
+    redrawMenu();
+  }
+
   switch(currentMenuItem)
   {
   case SENSOR_STATUS:

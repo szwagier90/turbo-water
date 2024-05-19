@@ -35,11 +35,11 @@ unsigned long pumpLastActivationTime = 0;
 
 Encoder encoder(ENCODER_PIN_A, ENCODER_PIN_B);
 
-int currentMenuItem = -1; // Selected menu item index
+int newMenuItem = -1;
 
 Pump pump(pumpOutput);
 
-View v(lcd, currentMenuItem, sensorValue, soilMoisturePercent, pumpOutput);
+View v(lcd, newMenuItem, sensorValue, soilMoisturePercent, pumpOutput);
 
 void setup() {
   delay(100);
@@ -58,19 +58,11 @@ void loop() {
   buttonInput = digitalRead(buttonInputPin);
   sensorValue = analogRead(sensorPin);
 
-  int newMenuItem = (encoder.read() / 4) % MENU_SIZE;
+  newMenuItem = (encoder.read() / 4) % MENU_SIZE;
   if(newMenuItem < 0)
   {
     encoder.write((MENU_SIZE - 1) * 4);
     newMenuItem = MENU_SIZE - 1;
-  }
-
-  if (currentMenuItem != newMenuItem)
-  {
-    currentMenuItem = newMenuItem;
-
-    v.redrawMenu();
-    v.lcdUpdate();
   }
 
   switch(state)

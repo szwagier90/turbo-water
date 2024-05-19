@@ -20,7 +20,7 @@ public:
 
   View (
     LiquidCrystal_I2C & lcd,
-    int & currentMenuItem,
+    int & newMenuItem,
     int & sensorValue,
     int & soilMoisturePercent,
     bool & pumpOutput
@@ -35,7 +35,8 @@ private:
 
   LiquidCrystal_I2C & lcd;
 
-  int & currentMenuItem;
+  int & newMenuItem;
+  size_t currentMenuItem;
   unsigned long lastADCViewUpdateTime;
   const unsigned long ADCViewUpdateInterval = 500; // 0.5 seconds
   int & sensorValue;
