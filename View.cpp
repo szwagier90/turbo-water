@@ -1,5 +1,7 @@
 #include "View.h"
 
+#include <Arduino.h>
+
 MenuItem menu[MENU_SIZE] = {
   {"Moisture", "ADC:     |%:    "},
   {"Pump State", "Pump:    "}
@@ -20,6 +22,22 @@ View::View (
     soilMoisturePercent(soilMoisturePercent),
     pumpOutput(pumpOutput)
   {};
+
+void View::lcdInit()
+{
+  Serial.println("LCD Initialization");
+
+  lcd.init();
+  lcd.backlight();
+  lcd.print(" PLANT WATERING ");
+  lcd.setCursor(0,1);
+  lcd.print("     SYSTEM     ");
+  delay(2000);
+  lcd.clear();
+
+  lcd.setCursor(0,0);
+  lcd.print("Pump: ");
+}
 
 void View::redrawMenu()
 {

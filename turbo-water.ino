@@ -47,7 +47,7 @@ void setup() {
   delay(100);
   Serial.println("SERIAL INIT");
 
-  lcdInit();
+  v.lcdInit();
   pumpOutputInit();
   analogInputInit();
   buttonInputInit();
@@ -111,25 +111,10 @@ void normal()
   if(pump.isActivated() && (millis() - pumpActivationStartTime >= pumpActivationTime))
   {
     pump.pumpOff();
+    model.pumpOnOffState = false;
     v.lcdUpdate();
     pumpLastActivationTime = millis();
   }
-}
-
-void lcdInit()
-{
-  Serial.println("LCD Initialization");
-
-  lcd.init();
-  lcd.backlight();
-  lcd.print(" PLANT WATERING ");
-  lcd.setCursor(0,1);
-  lcd.print("     SYSTEM     ");
-  delay(2000);
-  lcd.clear();
-
-  lcd.setCursor(0,0);
-  lcd.print("Pump: ");
 }
 
 void pumpOutputInit()

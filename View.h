@@ -26,6 +26,7 @@ public:
     bool & pumpOutput
   );
 
+  void lcdInit();
   void redrawMenu();
   void lcdUpdate();
 
