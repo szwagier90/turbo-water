@@ -35,18 +35,6 @@ unsigned long pumpLastActivationTime = 0;
 
 Encoder encoder(ENCODER_PIN_A, ENCODER_PIN_B);
 
-#define MENU_SIZE 2
-
-struct MenuItem {
-  String title;
-  String templ;
-};
-
-MenuItem menu[MENU_SIZE] = {
-  {"Moisture", "ADC:     |%:    "},
-  {"Pump State", "Pump:    "}
-};
-
 int currentMenuItem = -1; // Selected menu item index
 
 Pump pump(pumpOutput);
@@ -81,14 +69,7 @@ void loop() {
   {
     currentMenuItem = newMenuItem;
 
-    lcd.clear();
-    lcd.setCursor(0, 0);
-    lcd.print(currentMenuItem+1);
-    lcd.print(": ");
-    lcd.print(menu[currentMenuItem].title);
-    lcd.setCursor(0, 1);
-    lcd.print(menu[currentMenuItem].templ);
-
+    v.redrawMenu();
     v.lcdUpdate();
   }
 

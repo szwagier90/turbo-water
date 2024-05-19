@@ -3,6 +3,13 @@
 
 #include "LiquidCrystal_I2C.h"
 
+#define MENU_SIZE 2
+
+struct MenuItem {
+  String title;
+  String templ;
+};
+
 class View {
 public:
   enum Menu
@@ -19,6 +26,7 @@ public:
     bool & pumpOutput
   );
 
+  void redrawMenu();
   void lcdUpdate();
 
 private:
