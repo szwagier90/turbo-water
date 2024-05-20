@@ -39,7 +39,7 @@ Pump pump(pumpOutput);
 
 Model model = {0};
 
-View v(model, newMenuItem, soilMoisturePercent);
+View v(model, newMenuItem);
 
 void setup() {
   delay(100);
@@ -98,6 +98,7 @@ void calibration()
 void normal()
 {
   soilMoisturePercent = map(sensorValue, soilMoistureMax, soilMoistureMin, 0, 100);
+  model.moisturePercent = soilMoisturePercent;
 
   if(millis() - pumpLastActivationTime > pumpIntervalTime)
   {

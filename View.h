@@ -20,8 +20,8 @@ public:
   };
 
   View (
-    int & newMenuItem,
-    int & soilMoisturePercent
+    Model & model,
+    int & newMenuItem
   );
 
   void lcdInit();
@@ -40,7 +40,6 @@ private:
   size_t currentMenuItem;
   unsigned long lastADCViewUpdateTime;
   const unsigned long ADCViewUpdateInterval = 500; // 0.5 seconds
-  int & soilMoisturePercent;
   bool pumpOnOffState;
 };
 
