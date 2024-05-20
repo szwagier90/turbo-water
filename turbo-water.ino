@@ -187,6 +187,7 @@ bool loadEepromData()
   if(EEPROM_VERSION != eeprom.version)
   {
     Serial.println("EEPROM: Version mismatch or no data");
+    eepromClearMemory();
     return false;
   }
 
@@ -212,4 +213,12 @@ void saveCalibrationData() {
   Serial.println("EEPROM: Data saved");
 
   EEPROM.end();
+}
+
+void eepromClearMemory()
+{
+  eeprom = {0};
+  EEPROM.put(0, eeprom);
+  EEPROM.commit(); // Only needed for ESP boards
+  Serial.println("EEPROM: Memory cleared");
 }
