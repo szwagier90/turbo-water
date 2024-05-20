@@ -65,7 +65,14 @@ void setup() {
   buttonInputInit();
   soilMoistureSensorInit();
 
-  loadEepromData();
+  if(!loadEepromData())
+  {
+    state = STATE_CALIBRATION;
+  }
+  else
+  {
+    state = STATE_NORMAL;
+  }
 }
 
 void loop() {
@@ -161,7 +168,7 @@ void soilMoistureSensorInit()
   soilMoistureMax = sensorValue + 1;
 }
 
-void loadEepromData()
+bool loadEepromData()
 {
   EEPROM.begin(sizeof(Eeprom));
   delay(20);
@@ -176,5 +183,17 @@ void loadEepromData()
   Serial.print(" | Version -  ");
   Serial.println(eeprom.version);
 
+  if(EEPROM_VERSION != eeprom.version)
+  {
+    Serial.println("EEPROM: Version mismatch or no data");
+    return false;
+  }
+
+  soilMoistureMin = eeprom.soilMoistureMin;
+  soilMoistureMax = eeprom.soilMoistureMax;
+  Serial.println("EEPROM: Data loaded");
+
   EEPROM.end();
+
+  return true;
 }
