@@ -37,7 +37,9 @@ int newMenuItem = -1;
 
 Pump pump(pumpOutput);
 
-View v(newMenuItem, sensorValue, soilMoisturePercent, pumpOutput);
+Model model = {0};
+
+View v(model, newMenuItem);
 
 void setup() {
   delay(100);
@@ -55,6 +57,7 @@ void setup() {
 void loop() {
   buttonInput = digitalRead(buttonInputPin);
   sensorValue = analogRead(sensorPin);
+  model.moistureAdcValue = sensorValue;
 
   newMenuItem = (encoder.read() / 4) % MENU_SIZE;
   if(newMenuItem < 0)
@@ -95,13 +98,14 @@ void calibration()
 void normal()
 {
   soilMoisturePercent = map(sensorValue, soilMoistureMax, soilMoistureMin, 0, 100);
+  model.moisturePercent = soilMoisturePercent;
 
   if(millis() - pumpLastActivationTime > pumpIntervalTime)
   {
     if(soilMoisturePercent < soilMoistureThreshold && !pump.isActivated())
     {
       pump.pumpOn();
-      v.lcdUpdate();
+      model.pumpOnOffState = true;
       pumpActivationStartTime = millis();
     }
   }
@@ -109,7 +113,7 @@ void normal()
   if(pump.isActivated() && (millis() - pumpActivationStartTime >= pumpActivationTime))
   {
     pump.pumpOff();
-    v.lcdUpdate();
+    model.pumpOnOffState = false;
     pumpLastActivationTime = millis();
   }
 }

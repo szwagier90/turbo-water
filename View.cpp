@@ -8,18 +8,16 @@ MenuItem menu[MENU_SIZE] = {
 };
 
 View::View (
-  int & newMenuItem,
-  int & sensorValue,
-  int & soilMoisturePercent,
-  bool & pumpOutput) :
+  Model & model,
+  int & newMenuItem
+) :
+    model(model),
     lcd(0x27,16,2),  // I2C address: 0x27 | LCD: 16x2),
     newMenuItem(newMenuItem),
     currentMenuItem(-1),
     lastADCViewUpdateTime(0),
     ADCViewUpdateInterval(500),
-    sensorValue(sensorValue),
-    soilMoisturePercent(soilMoisturePercent),
-    pumpOutput(pumpOutput)
+    pumpOnOffState(false)
   {};
 
 void View::lcdInit()
@@ -76,14 +74,18 @@ void View::sensorStatusView()
   if((millis()-lastADCViewUpdateTime) > ADCViewUpdateInterval)
   {
     lcd.setCursor(5, 1);
-    lcd.print(sensorValue);
+    lcd.print(model.moistureAdcValue);
     lcd.setCursor(13, 1);
-    lcd.print(soilMoisturePercent);
+    lcd.print(model.moisturePercent);
   }
 }
 
 void View::pumpStatusView()
 {
-  lcd.setCursor(6, 1);
-  lcd.print(pumpOutput ? "On " : "Off");
+  if(pumpOnOffState != model.pumpOnOffState)
+  {
+    pumpOnOffState = model.pumpOnOffState;
+    lcd.setCursor(6, 1);
+    lcd.print(pumpOnOffState ? "On " : "Off");
+  }
 }
