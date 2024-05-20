@@ -21,7 +21,6 @@ public:
 
   View (
     int & newMenuItem,
-    int & sensorValue,
     int & soilMoisturePercent
   );
 
@@ -41,7 +40,6 @@ private:
   size_t currentMenuItem;
   unsigned long lastADCViewUpdateTime;
   const unsigned long ADCViewUpdateInterval = 500; // 0.5 seconds
-  int & sensorValue;
   int & soilMoisturePercent;
   bool pumpOnOffState;
 };

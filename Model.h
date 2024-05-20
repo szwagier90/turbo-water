@@ -3,6 +3,7 @@
 
 struct Model
 {
+  unsigned moistureAdcValue;
   bool pumpOnOffState;
 };
 

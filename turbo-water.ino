@@ -39,7 +39,7 @@ Pump pump(pumpOutput);
 
 Model model = {0};
 
-View v(model, newMenuItem, sensorValue, soilMoisturePercent);
+View v(model, newMenuItem, soilMoisturePercent);
 
 void setup() {
   delay(100);
@@ -57,6 +57,7 @@ void setup() {
 void loop() {
   buttonInput = digitalRead(buttonInputPin);
   sensorValue = analogRead(sensorPin);
+  model.moistureAdcValue = sensorValue;
 
   newMenuItem = (encoder.read() / 4) % MENU_SIZE;
   if(newMenuItem < 0)

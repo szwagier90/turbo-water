@@ -10,7 +10,6 @@ MenuItem menu[MENU_SIZE] = {
 View::View (
   Model & model,
   int & newMenuItem,
-  int & sensorValue,
   int & soilMoisturePercent
 ) :
     model(model),
@@ -19,7 +18,6 @@ View::View (
     currentMenuItem(-1),
     lastADCViewUpdateTime(0),
     ADCViewUpdateInterval(500),
-    sensorValue(sensorValue),
     soilMoisturePercent(soilMoisturePercent),
     pumpOnOffState(false)
   {};
@@ -78,7 +76,7 @@ void View::sensorStatusView()
   if((millis()-lastADCViewUpdateTime) > ADCViewUpdateInterval)
   {
     lcd.setCursor(5, 1);
-    lcd.print(sensorValue);
+    lcd.print(model.moistureAdcValue);
     lcd.setCursor(13, 1);
     lcd.print(soilMoisturePercent);
   }
