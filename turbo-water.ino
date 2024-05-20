@@ -37,7 +37,9 @@ int newMenuItem = -1;
 
 Pump pump(pumpOutput);
 
-View v(newMenuItem, sensorValue, soilMoisturePercent, pumpOutput);
+Model model = {0};
+
+View v(model, newMenuItem, sensorValue, soilMoisturePercent);
 
 void setup() {
   delay(100);
@@ -101,7 +103,7 @@ void normal()
     if(soilMoisturePercent < soilMoistureThreshold && !pump.isActivated())
     {
       pump.pumpOn();
-      v.lcdUpdate();
+      model.pumpOnOffState = true;
       pumpActivationStartTime = millis();
     }
   }
@@ -109,7 +111,7 @@ void normal()
   if(pump.isActivated() && (millis() - pumpActivationStartTime >= pumpActivationTime))
   {
     pump.pumpOff();
-    v.lcdUpdate();
+    model.pumpOnOffState = false;
     pumpLastActivationTime = millis();
   }
 }

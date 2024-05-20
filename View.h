@@ -1,6 +1,7 @@
 #ifndef VIEW_H
 #define VIEW_H
 
+#include "Model.h"
 #include "LiquidCrystal_I2C.h"
 
 #define MENU_SIZE 2
@@ -21,8 +22,7 @@ public:
   View (
     int & newMenuItem,
     int & sensorValue,
-    int & soilMoisturePercent,
-    bool & pumpOutput
+    int & soilMoisturePercent
   );
 
   void lcdInit();
@@ -34,6 +34,7 @@ private:
   void sensorStatusView();
   void pumpStatusView();
 
+  Model & model;
   LiquidCrystal_I2C lcd;
 
   int & newMenuItem;
@@ -42,7 +43,7 @@ private:
   const unsigned long ADCViewUpdateInterval = 500; // 0.5 seconds
   int & sensorValue;
   int & soilMoisturePercent;
-  bool & pumpOutput;
+  bool pumpOnOffState;
 };
 
 #endif
