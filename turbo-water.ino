@@ -1,7 +1,19 @@
 #include "LiquidCrystal_I2C.h"
+
+#include <EEPROM.h>
 #include <Encoder.h>
 #include "Pump.h"
 #include "View.h"
+
+#define EEPROM_VERSION 1
+
+struct Eeprom {
+  uint16_t soilMoistureMin;
+  uint16_t soilMoistureMax;
+  uint8_t version;
+};
+
+Eeprom eeprom = {0};
 
 typedef enum { STATE_CALIBRATION,
                STATE_NORMAL } States;
@@ -52,6 +64,15 @@ void setup() {
   analogInputInit();
   buttonInputInit();
   soilMoistureSensorInit();
+
+  if(!loadEepromData())
+  {
+    state = STATE_CALIBRATION;
+  }
+  else
+  {
+    state = STATE_NORMAL;
+  }
 }
 
 void loop() {
@@ -74,6 +95,7 @@ void loop() {
       if(buttonInput)
       {
         state = STATE_NORMAL;
+        saveCalibrationData();
       }
       break;
     case STATE_NORMAL:
@@ -145,4 +167,58 @@ void soilMoistureSensorInit()
   sensorValue = analogRead(sensorPin);
   soilMoistureMin = sensorValue;
   soilMoistureMax = sensorValue + 1;
+}
+
+bool loadEepromData()
+{
+  EEPROM.begin(sizeof(Eeprom));
+  delay(20);
+  EEPROM.get(0, eeprom);
+
+  Serial.print("EEPROM Length: ");
+  Serial.println(EEPROM.length());
+  Serial.print("EEPROM: SMMin - ");
+  Serial.print(eeprom.soilMoistureMin);
+  Serial.print(" | SMMax -  ");
+  Serial.print(eeprom.soilMoistureMax);
+  Serial.print(" | Version -  ");
+  Serial.println(eeprom.version);
+
+  if(EEPROM_VERSION != eeprom.version)
+  {
+    Serial.println("EEPROM: Version mismatch or no data");
+    eepromClearMemory();
+    return false;
+  }
+
+  soilMoistureMin = eeprom.soilMoistureMin;
+  soilMoistureMax = eeprom.soilMoistureMax;
+  Serial.println("EEPROM: Data loaded");
+
+  EEPROM.end();
+
+  return true;
+}
+
+void saveCalibrationData() {
+  EEPROM.begin(sizeof(Eeprom));
+  delay(20);
+
+  eeprom.soilMoistureMin = soilMoistureMin;
+  eeprom.soilMoistureMax = soilMoistureMax;
+  eeprom.version = EEPROM_VERSION;
+
+  EEPROM.put(0, eeprom);
+  EEPROM.commit(); // Only needed for ESP boards
+  Serial.println("EEPROM: Data saved");
+
+  EEPROM.end();
+}
+
+void eepromClearMemory()
+{
+  eeprom = {0};
+  EEPROM.put(0, eeprom);
+  EEPROM.commit(); // Only needed for ESP boards
+  Serial.println("EEPROM: Memory cleared");
 }
