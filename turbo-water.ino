@@ -1,7 +1,19 @@
 #include "LiquidCrystal_I2C.h"
+
+#include <EEPROM.h>
 #include <Encoder.h>
 #include "Pump.h"
 #include "View.h"
+
+#define EEPROM_VERSION 1
+
+struct Eeprom {
+  uint16_t soilMoistureMin;
+  uint16_t soilMoistureMax;
+  uint8_t version;
+};
+
+Eeprom eeprom = {0};
 
 typedef enum { STATE_CALIBRATION,
                STATE_NORMAL } States;
@@ -52,6 +64,8 @@ void setup() {
   analogInputInit();
   buttonInputInit();
   soilMoistureSensorInit();
+
+  loadEepromData();
 }
 
 void loop() {
@@ -145,4 +159,22 @@ void soilMoistureSensorInit()
   sensorValue = analogRead(sensorPin);
   soilMoistureMin = sensorValue;
   soilMoistureMax = sensorValue + 1;
+}
+
+void loadEepromData()
+{
+  EEPROM.begin(sizeof(Eeprom));
+  delay(20);
+  EEPROM.get(0, eeprom);
+
+  Serial.print("EEPROM Length: ");
+  Serial.println(EEPROM.length());
+  Serial.print("EEPROM: SMMin - ");
+  Serial.print(eeprom.soilMoistureMin);
+  Serial.print(" | SMMax -  ");
+  Serial.print(eeprom.soilMoistureMax);
+  Serial.print(" | Version -  ");
+  Serial.println(eeprom.version);
+
+  EEPROM.end();
 }
