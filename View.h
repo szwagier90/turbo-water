@@ -30,6 +30,7 @@ public:
   void lcdUpdate();
 
 private:
+  void initSplash();
   void sensorStatusView();
   void pumpStatusView();
 

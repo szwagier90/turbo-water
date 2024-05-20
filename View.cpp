@@ -28,16 +28,19 @@ void View::lcdInit()
 
   lcd.init();
   lcd.backlight();
-  lcd.print(" PLANT WATERING ");
-  lcd.setCursor(0,1);
-  lcd.print("     SYSTEM     ");
-  delay(2000);
   lcd.clear();
-
+  initSplash();
   lcd.setCursor(0,0);
   lcd.print("Pump: ");
 }
 
+void View::initSplash()
+{
+  lcd.print(" PLANT WATERING ");
+  lcd.setCursor(0,1);
+  lcd.print("     SYSTEM     ");
+  delay(2000);
+}
 void View::redrawMenu()
 {
   lcd.clear();
