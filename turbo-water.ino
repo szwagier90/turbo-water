@@ -95,6 +95,7 @@ void loop() {
       if(buttonInput)
       {
         state = STATE_NORMAL;
+        saveCalibrationData();
       }
       break;
     case STATE_NORMAL:
@@ -196,4 +197,19 @@ bool loadEepromData()
   EEPROM.end();
 
   return true;
+}
+
+void saveCalibrationData() {
+  EEPROM.begin(sizeof(Eeprom));
+  delay(20);
+
+  eeprom.soilMoistureMin = soilMoistureMin;
+  eeprom.soilMoistureMax = soilMoistureMax;
+  eeprom.version = EEPROM_VERSION;
+
+  EEPROM.put(0, eeprom);
+  EEPROM.commit(); // Only needed for ESP boards
+  Serial.println("EEPROM: Data saved");
+
+  EEPROM.end();
 }
