@@ -3,6 +3,7 @@
 #include <EEPROM.h>
 #include <Encoder.h>
 
+#include "Plant.h"
 #include "Pump.h"
 #include "Sensor.h"
 #include "View.h"
@@ -19,22 +20,17 @@ Eeprom eeprom = {0};
 
 Sensor sensor;
 
+Plant plant;
+
 const int pumpOutputPin = D5;
 bool pumpOutput = LOW;
 
 const int sensorPin = A0;
 int sensorValue = 0;
 int soilMoisturePercent = 0;
-const int soilMoistureThreshold = 30;
 
 const int buttonInputPin = D0;
 unsigned buttonInput = 0;
-
-const unsigned long pumpActivationTime = 5000; // 5 seconds (adjust as needed)
-unsigned long pumpActivationStartTime = 0;
-
-const unsigned long pumpIntervalTime = 10000; // 10 seconds
-unsigned long pumpLastActivationTime = 0;
 
 #define ENCODER_PIN_A D6
 #define ENCODER_PIN_B D7
@@ -117,21 +113,21 @@ void normal()
   soilMoisturePercent = map(sensorValue, sensor.soilMoistureDry, sensor.soilMoistureWet, 0, 100);
   model.moisturePercent = soilMoisturePercent;
 
-  if(millis() - pumpLastActivationTime > pumpIntervalTime)
+  if(millis() - plant.pumpLastActivationTime > plant.pumpIntervalTime)
   {
-    if(soilMoisturePercent < soilMoistureThreshold && !pump.isActivated())
+    if(soilMoisturePercent < plant.soilMoistureThreshold && !pump.isActivated())
     {
       pump.pumpOn();
       model.pumpOnOffState = true;
-      pumpActivationStartTime = millis();
+      plant.pumpActivationStartTime = millis();
     }
   }
 
-  if(pump.isActivated() && (millis() - pumpActivationStartTime >= pumpActivationTime))
+  if(pump.isActivated() && (millis() - plant.pumpActivationStartTime >= plant.pumpActivationTime))
   {
     pump.pumpOff();
     model.pumpOnOffState = false;
-    pumpLastActivationTime = millis();
+    plant.pumpLastActivationTime = millis();
   }
 }
 
