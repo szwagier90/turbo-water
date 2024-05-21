@@ -2,7 +2,9 @@
 
 #include <EEPROM.h>
 #include <Encoder.h>
+
 #include "Pump.h"
+#include "Sensor.h"
 #include "View.h"
 
 #define EEPROM_VERSION 1
@@ -15,26 +17,6 @@ struct Eeprom {
 
 Eeprom eeprom = {0};
 
-typedef enum
-{
-  STATE_CALIBRATION,
-  STATE_NORMAL
-} States;
-
-struct Sensor
-{
-  Sensor(
-    uint16_t dry = 10000,
-    uint16_t wet = 0,
-    States s = STATE_CALIBRATION
-  ) : soilMoistureDry(dry),
-      soilMoistureWet(wet),
-      state(s) {}
-
-  uint16_t soilMoistureDry;
-  uint16_t soilMoistureWet;
-  States state;
-};
 Sensor sensor;
 
 const int pumpOutputPin = D5;
