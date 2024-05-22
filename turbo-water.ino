@@ -3,6 +3,8 @@
 #include <EEPROM.h>
 #include <Encoder.h>
 
+#include <ezButton.h>
+
 #include "Plant.h"
 #include "Pump.h"
 #include "Sensor.h"
@@ -18,6 +20,17 @@ struct Eeprom {
 
 Eeprom eeprom = {0};
 
+const int SHORT_PRESS_TIME = 100; // 100 milliseconds
+const int LONG_PRESS_TIME  = 3000; // 1000 milliseconds
+
+const int buttonInputPin = D0;
+ezButton button(buttonInputPin, INPUT_PULLUP);
+
+unsigned long pressedTime  = 0;
+unsigned long releasedTime = 0;
+bool isPressing = false;
+bool isLongDetected = false;
+
 Sensor sensor;
 
 Plant plant;
@@ -29,7 +42,6 @@ const int sensorPin = A0;
 int sensorValue = 0;
 int soilMoisturePercent = 0;
 
-const int buttonInputPin = D0;
 unsigned buttonInput = 0;
 
 #define ENCODER_PIN_A D6
@@ -68,7 +80,8 @@ void setup() {
 }
 
 void loop() {
-  buttonInput = digitalRead(buttonInputPin);
+  handleButton();
+
   sensorValue = analogRead(sensorPin);
   model.moistureAdcValue = sensorValue;
 
@@ -84,7 +97,7 @@ void loop() {
     case STATE_CALIBRATION:
       calibration();
 
-      if(buttonInput)
+      if(button.isPressed())
       {
         sensor.state = STATE_NORMAL;
         saveCalibrationData();
@@ -148,7 +161,7 @@ void analogInputInit()
 void buttonInputInit()
 {
   Serial.println("Button Input Initialization");
-  pinMode(buttonInputPin, INPUT);
+  button.setDebounceTime(50); // set debounce time to 50 milliseconds
 }
 
 void soilMoistureSensorInit()
@@ -212,4 +225,37 @@ void eepromClearMemory()
   EEPROM.put(0, eeprom);
   EEPROM.commit(); // Only needed for ESP boards
   Serial.println("EEPROM: Memory cleared");
+}
+
+void handleButton()
+{
+  button.loop(); // MUST call the loop() function first
+
+  if(button.isPressed())
+  {
+    pressedTime = millis();
+    isPressing = true;
+    isLongDetected = false;
+  }
+
+  if(button.isReleased())
+  {
+    isPressing = false;
+    releasedTime = millis();
+
+    long pressDuration = releasedTime - pressedTime;
+
+    if((pressDuration > SHORT_PRESS_TIME) && (pressDuration < LONG_PRESS_TIME))
+      Serial.println("A short press is detected");
+  }
+
+  if(isPressing == true && isLongDetected == false)
+  {
+    long pressDuration = millis() - pressedTime;
+
+    if( pressDuration > LONG_PRESS_TIME ) {
+      Serial.println("A long press is detected");
+      isLongDetected = true;
+    }
+  }
 }
