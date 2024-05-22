@@ -2,24 +2,25 @@
 
 #include <EEPROM.h>
 #include <Encoder.h>
+
+#include "Plant.h"
 #include "Pump.h"
+#include "Sensor.h"
 #include "View.h"
 
 #define EEPROM_VERSION 1
 
 struct Eeprom {
-  uint16_t soilMoistureMin;
-  uint16_t soilMoistureMax;
+  uint16_t soilMoistureDry;
+  uint16_t soilMoistureWet;
   uint8_t version;
 };
 
 Eeprom eeprom = {0};
 
-typedef enum { STATE_CALIBRATION,
-               STATE_NORMAL } States;
+Sensor sensor;
 
-// current state-machine state
-States state = STATE_CALIBRATION;
+Plant plant;
 
 const int pumpOutputPin = D5;
 bool pumpOutput = LOW;
@@ -27,18 +28,9 @@ bool pumpOutput = LOW;
 const int sensorPin = A0;
 int sensorValue = 0;
 int soilMoisturePercent = 0;
-const int soilMoistureThreshold = 30;
-unsigned int soilMoistureMin = 10000;
-unsigned int soilMoistureMax = 0;
 
 const int buttonInputPin = D0;
 unsigned buttonInput = 0;
-
-const unsigned long pumpActivationTime = 5000; // 5 seconds (adjust as needed)
-unsigned long pumpActivationStartTime = 0;
-
-const unsigned long pumpIntervalTime = 10000; // 10 seconds
-unsigned long pumpLastActivationTime = 0;
 
 #define ENCODER_PIN_A D6
 #define ENCODER_PIN_B D7
@@ -67,11 +59,11 @@ void setup() {
 
   if(!loadEepromData())
   {
-    state = STATE_CALIBRATION;
+    sensor.state = STATE_CALIBRATION;
   }
   else
   {
-    state = STATE_NORMAL;
+    sensor.state = STATE_NORMAL;
   }
 }
 
@@ -87,14 +79,14 @@ void loop() {
     newMenuItem = MENU_SIZE - 1;
   }
 
-  switch(state)
+  switch(sensor.state)
   {
     case STATE_CALIBRATION:
       calibration();
 
       if(buttonInput)
       {
-        state = STATE_NORMAL;
+        sensor.state = STATE_NORMAL;
         saveCalibrationData();
       }
       break;
@@ -110,33 +102,32 @@ void loop() {
 
 void calibration()
 {
-  if (sensorValue < soilMoistureMin)
-    soilMoistureMin = sensorValue;
-  if (sensorValue > soilMoistureMax)
-    soilMoistureMax = sensorValue;
-
+  if (sensorValue < sensor.soilMoistureWet)
+    sensor.soilMoistureWet = sensorValue;
+  if (sensorValue > sensor.soilMoistureDry)
+    sensor.soilMoistureDry = sensorValue;
 }
 
 void normal()
 {
-  soilMoisturePercent = map(sensorValue, soilMoistureMax, soilMoistureMin, 0, 100);
+  soilMoisturePercent = map(sensorValue, sensor.soilMoistureDry, sensor.soilMoistureWet, 0, 100);
   model.moisturePercent = soilMoisturePercent;
 
-  if(millis() - pumpLastActivationTime > pumpIntervalTime)
+  if(millis() - plant.pumpLastActivationTime > plant.pumpIntervalTime)
   {
-    if(soilMoisturePercent < soilMoistureThreshold && !pump.isActivated())
+    if(soilMoisturePercent < plant.soilMoistureThreshold && !pump.isActivated())
     {
       pump.pumpOn();
       model.pumpOnOffState = true;
-      pumpActivationStartTime = millis();
+      plant.pumpActivationStartTime = millis();
     }
   }
 
-  if(pump.isActivated() && (millis() - pumpActivationStartTime >= pumpActivationTime))
+  if(pump.isActivated() && (millis() - plant.pumpActivationStartTime >= plant.pumpActivationTime))
   {
     pump.pumpOff();
     model.pumpOnOffState = false;
-    pumpLastActivationTime = millis();
+    plant.pumpLastActivationTime = millis();
   }
 }
 
@@ -165,8 +156,8 @@ void soilMoistureSensorInit()
   Serial.println("Soil Moisture Sensor Initialization");
 
   sensorValue = analogRead(sensorPin);
-  soilMoistureMin = sensorValue;
-  soilMoistureMax = sensorValue + 1;
+  sensor.soilMoistureDry = sensorValue;
+  sensor.soilMoistureWet = sensorValue + 1;
 }
 
 bool loadEepromData()
@@ -178,9 +169,9 @@ bool loadEepromData()
   Serial.print("EEPROM Length: ");
   Serial.println(EEPROM.length());
   Serial.print("EEPROM: SMMin - ");
-  Serial.print(eeprom.soilMoistureMin);
+  Serial.print(eeprom.soilMoistureDry);
   Serial.print(" | SMMax -  ");
-  Serial.print(eeprom.soilMoistureMax);
+  Serial.print(eeprom.soilMoistureWet);
   Serial.print(" | Version -  ");
   Serial.println(eeprom.version);
 
@@ -191,8 +182,8 @@ bool loadEepromData()
     return false;
   }
 
-  soilMoistureMin = eeprom.soilMoistureMin;
-  soilMoistureMax = eeprom.soilMoistureMax;
+  sensor.soilMoistureDry = eeprom.soilMoistureDry;
+  sensor.soilMoistureWet = eeprom.soilMoistureWet;
   Serial.println("EEPROM: Data loaded");
 
   EEPROM.end();
@@ -204,8 +195,8 @@ void saveCalibrationData() {
   EEPROM.begin(sizeof(Eeprom));
   delay(20);
 
-  eeprom.soilMoistureMin = soilMoistureMin;
-  eeprom.soilMoistureMax = soilMoistureMax;
+  eeprom.soilMoistureDry = sensor.soilMoistureDry;
+  eeprom.soilMoistureWet = sensor.soilMoistureWet;
   eeprom.version = EEPROM_VERSION;
 
   EEPROM.put(0, eeprom);
