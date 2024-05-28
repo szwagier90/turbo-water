@@ -7,14 +7,10 @@ MenuItem menu[MENU_SIZE] = {
   {"Pump State", "Pump:    "}
 };
 
-View::View (
-  Model & model,
-  int & newMenuItem
-) :
+View::View (Model & model) :
     model(model),
     lcd(0x27,16,2),  // I2C address: 0x27 | LCD: 16x2),
-    newMenuItem(newMenuItem),
-    currentMenuItem(-1),
+    menuIndex(0),
     lastADCViewUpdateTime(0),
     ADCViewUpdateInterval(500),
     pumpOnOffState(false)
@@ -28,8 +24,7 @@ void View::lcdInit()
   lcd.backlight();
   lcd.clear();
   initSplash();
-  lcd.setCursor(0,0);
-  lcd.print("Pump: ");
+  displayMenu(0);
 }
 
 void View::initSplash()
@@ -39,26 +34,25 @@ void View::initSplash()
   lcd.print("     SYSTEM     ");
   delay(2000);
 }
-void View::redrawMenu()
+
+void View::displayMenu(int menuIndex)
 {
+  this->menuIndex = menuIndex;
+
   lcd.clear();
   lcd.setCursor(0, 0);
-  lcd.print(currentMenuItem+1);
+  lcd.print(this->menuIndex+1);
   lcd.print(": ");
-  lcd.print(menu[currentMenuItem].title);
+  lcd.print(menu[this->menuIndex].title);
   lcd.setCursor(0, 1);
-  lcd.print(menu[currentMenuItem].templ);
+  lcd.print(menu[this->menuIndex].templ);
+
+  update();
 }
 
-void View::lcdUpdate()
+void View::update()
 {
-  if (currentMenuItem != newMenuItem)
-  {
-    currentMenuItem = newMenuItem;
-    redrawMenu();
-  }
-
-  switch(currentMenuItem)
+  switch(this->menuIndex)
   {
   case SENSOR_STATUS:
     sensorStatusView();

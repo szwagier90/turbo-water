@@ -19,14 +19,11 @@ public:
     PUMP_STATUS,
   };
 
-  View (
-    Model & model,
-    int & newMenuItem
-  );
+  View (Model & model);
 
   void lcdInit();
-  void redrawMenu();
-  void lcdUpdate();
+  void displayMenu(int menuIndex);
+  void update();
 
 private:
   void initSplash();
@@ -35,9 +32,7 @@ private:
 
   Model & model;
   LiquidCrystal_I2C lcd;
-
-  int & newMenuItem;
-  size_t currentMenuItem;
+  int menuIndex;
   unsigned long lastADCViewUpdateTime;
   const unsigned long ADCViewUpdateInterval = 500; // 0.5 seconds
   bool pumpOnOffState;

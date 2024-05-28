@@ -48,14 +48,13 @@ unsigned buttonInput = 0;
 #define ENCODER_PIN_B D7
 
 Encoder encoder(ENCODER_PIN_A, ENCODER_PIN_B);
-
-int newMenuItem = -1;
+int menuIndex = 0;
 
 Pump pump(pumpOutput);
 
 Model model = {0};
 
-View v(model, newMenuItem);
+View v(model);
 
 void setup() {
   delay(100);
@@ -81,16 +80,10 @@ void setup() {
 
 void loop() {
   handleButton();
+  handleMenu();
 
   sensorValue = analogRead(sensorPin);
   model.moistureAdcValue = sensorValue;
-
-  newMenuItem = (encoder.read() / 4) % MENU_SIZE;
-  if(newMenuItem < 0)
-  {
-    encoder.write((MENU_SIZE - 1) * 4);
-    newMenuItem = MENU_SIZE - 1;
-  }
 
   switch(sensor.state)
   {
@@ -110,7 +103,7 @@ void loop() {
 
 
   digitalWrite(pumpOutputPin, pumpOutput);
-  v.lcdUpdate();
+  v.update();
 }
 
 void calibration()
@@ -257,5 +250,21 @@ void handleButton()
       Serial.println("A long press is detected");
       isLongDetected = true;
     }
+  }
+}
+
+void handleMenu()
+{
+  int newMenuIndex = (encoder.read() / 4) % MENU_SIZE;
+  if(newMenuIndex < 0)
+  {
+    encoder.write((MENU_SIZE - 1) * 4);
+    newMenuIndex = MENU_SIZE - 1;
+  }
+
+  if (menuIndex != newMenuIndex)
+  {
+    menuIndex = newMenuIndex;
+    v.displayMenu(menuIndex);
   }
 }
