@@ -5,20 +5,11 @@
 
 #include <ezButton.h>
 
+#include "MyEeprom.h"
 #include "Plant.h"
 #include "Pump.h"
 #include "Sensor.h"
 #include "View.h"
-
-#define EEPROM_VERSION 1
-
-struct Eeprom {
-  uint16_t soilMoistureDry;
-  uint16_t soilMoistureWet;
-  uint8_t version;
-};
-
-Eeprom eeprom = {0};
 
 const int SHORT_PRESS_TIME = 100; // 100 milliseconds
 const int LONG_PRESS_TIME  = 3000; // 1000 milliseconds
@@ -68,7 +59,7 @@ void setup() {
   buttonInputInit();
   soilMoistureSensorInit();
 
-  if(!loadEepromData())
+  if(!loadEepromData(sensor))
   {
     sensor.state = STATE_CALIBRATION;
   }
@@ -93,7 +84,7 @@ void loop() {
       if(button.isPressed())
       {
         sensor.state = STATE_NORMAL;
-        saveCalibrationData();
+        saveCalibrationData(sensor);
       }
       break;
     case STATE_NORMAL:
@@ -164,60 +155,6 @@ void soilMoistureSensorInit()
   sensorValue = analogRead(sensorPin);
   sensor.soilMoistureDry = sensorValue;
   sensor.soilMoistureWet = sensorValue + 1;
-}
-
-bool loadEepromData()
-{
-  EEPROM.begin(sizeof(Eeprom));
-  delay(20);
-  EEPROM.get(0, eeprom);
-
-  Serial.print("EEPROM Length: ");
-  Serial.println(EEPROM.length());
-  Serial.print("EEPROM: SMMin - ");
-  Serial.print(eeprom.soilMoistureDry);
-  Serial.print(" | SMMax -  ");
-  Serial.print(eeprom.soilMoistureWet);
-  Serial.print(" | Version -  ");
-  Serial.println(eeprom.version);
-
-  if(EEPROM_VERSION != eeprom.version)
-  {
-    Serial.println("EEPROM: Version mismatch or no data");
-    eepromClearMemory();
-    return false;
-  }
-
-  sensor.soilMoistureDry = eeprom.soilMoistureDry;
-  sensor.soilMoistureWet = eeprom.soilMoistureWet;
-  Serial.println("EEPROM: Data loaded");
-
-  EEPROM.end();
-
-  return true;
-}
-
-void saveCalibrationData() {
-  EEPROM.begin(sizeof(Eeprom));
-  delay(20);
-
-  eeprom.soilMoistureDry = sensor.soilMoistureDry;
-  eeprom.soilMoistureWet = sensor.soilMoistureWet;
-  eeprom.version = EEPROM_VERSION;
-
-  EEPROM.put(0, eeprom);
-  EEPROM.commit(); // Only needed for ESP boards
-  Serial.println("EEPROM: Data saved");
-
-  EEPROM.end();
-}
-
-void eepromClearMemory()
-{
-  eeprom = {0};
-  EEPROM.put(0, eeprom);
-  EEPROM.commit(); // Only needed for ESP boards
-  Serial.println("EEPROM: Memory cleared");
 }
 
 void handleButton()
