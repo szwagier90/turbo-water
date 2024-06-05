@@ -5,6 +5,7 @@
 
 #include <ezButton.h>
 
+#include "Model.h"
 #include "MyEeprom.h"
 #include "Plant.h"
 #include "Pump.h"
@@ -202,6 +203,10 @@ void handleMenu()
   if (menuIndex != newMenuIndex)
   {
     menuIndex = newMenuIndex;
+
+    Serial.print("Menu: ");
+    Serial.println(menu2str(menuIndex));
+
     v.displayMenu(menuIndex);
   }
 }

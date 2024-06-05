@@ -13,12 +13,6 @@ struct MenuItem {
 
 class View {
 public:
-  enum Menu
-  {
-    SENSOR_STATUS,
-    PUMP_STATUS,
-  };
-
   View (Model & model);
 
   void lcdInit();
