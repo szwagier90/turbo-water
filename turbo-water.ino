@@ -21,6 +21,7 @@ ezButton button(buttonInputPin, INPUT_PULLUP);
 unsigned long pressedTime  = 0;
 unsigned long releasedTime = 0;
 bool isPressing = false;
+bool isShortDetected = false;
 bool isLongDetected = false;
 
 Sensor sensor;
@@ -166,6 +167,7 @@ void handleButton()
   {
     pressedTime = millis();
     isPressing = true;
+    isShortDetected = false;
     isLongDetected = false;
   }
 
@@ -177,14 +179,12 @@ void handleButton()
     long pressDuration = releasedTime - pressedTime;
 
     if((pressDuration > SHORT_PRESS_TIME) && (pressDuration < LONG_PRESS_TIME))
+    {
       Serial.println("A short press is detected");
-  }
-
-  if(isPressing == true && isLongDetected == false)
-  {
-    long pressDuration = millis() - pressedTime;
-
-    if( pressDuration > LONG_PRESS_TIME ) {
+      isShortDetected = true;
+    }
+    else if(pressDuration > LONG_PRESS_TIME)
+    {
       Serial.println("A long press is detected");
       isLongDetected = true;
     }
