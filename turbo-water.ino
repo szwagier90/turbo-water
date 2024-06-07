@@ -212,4 +212,12 @@ void handleMenu()
 
     v.displayMenu(menuIndex);
   }
+
+  switch(menuIndex)
+  {
+    case SENSOR_STATUS:
+      break;
+    case PUMP_STATUS:
+      break;
+  }
 }
