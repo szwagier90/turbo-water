@@ -4,7 +4,7 @@
 #include "Model.h"
 #include "LiquidCrystal_I2C.h"
 
-#define MENU_SIZE 2
+#define MENU_SIZE 3
 
 struct MenuItem {
   String title;
@@ -23,6 +23,7 @@ private:
   void initSplash();
   void sensorStatusView();
   void pumpStatusView();
+  void factoryResetView();
 
   Model & model;
   LiquidCrystal_I2C lcd;

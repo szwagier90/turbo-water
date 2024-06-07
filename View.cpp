@@ -4,7 +4,8 @@
 
 MenuItem menu[MENU_SIZE] = {
   {"Moisture", "ADC:     |%:    "},
-  {"Pump State", "Pump:    "}
+  {"Pump State", "Pump:    "},
+  {"FACTORY RESET", "LONGPRESS TO RST"}
 };
 
 View::View (Model & model) :
@@ -60,6 +61,8 @@ void View::update()
   case PUMP_STATUS:
     pumpStatusView();
     break;
+  case FACTORY_RESET:
+    factoryResetView();
   }
 }
 
@@ -82,4 +85,8 @@ void View::pumpStatusView()
     lcd.setCursor(6, 1);
     lcd.print(pumpOnOffState ? "On " : "Off");
   }
+}
+
+void View::factoryResetView()
+{
 }

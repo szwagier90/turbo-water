@@ -66,9 +66,13 @@ void saveCalibrationData(Sensor & sensor)
 
 void eepromClearMemory()
 {
+  EEPROM.begin(sizeof(Eeprom));
+
   eeprom = {0};
   EEPROM.put(0, eeprom);
   EEPROM.commit(); // Only needed for ESP boards
+
+  EEPROM.end();
   Serial.println("EEPROM: Memory cleared");
 }
 

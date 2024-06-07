@@ -5,6 +5,7 @@ enum Menu
 {
   SENSOR_STATUS,
   PUMP_STATUS,
+  FACTORY_RESET
 };
 
 const char * menu2str(int m);

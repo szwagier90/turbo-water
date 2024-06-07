@@ -219,5 +219,13 @@ void handleMenu()
       break;
     case PUMP_STATUS:
       break;
+    case FACTORY_RESET:
+      if(isLongDetected)
+      {
+        Serial.println("Clear EEPROM Memory!!!");
+        eepromClearMemory();
+        sensor.state = STATE_CALIBRATION;
+      }
+      break;
   }
 }
