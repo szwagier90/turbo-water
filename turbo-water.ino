@@ -97,6 +97,9 @@ void loop() {
 
   digitalWrite(pumpOutputPin, pumpOutput);
   v.update();
+
+  isShortDetected = false;
+  isLongDetected = false;
 }
 
 void calibration()
