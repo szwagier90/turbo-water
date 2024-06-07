@@ -220,7 +220,11 @@ void handleMenu()
     case PUMP_STATUS:
       break;
     case FACTORY_RESET:
-      if(isLongDetected)
+      if(isShortDetected)
+      {
+        readEepromMemory();
+      }
+      else if(isLongDetected)
       {
         Serial.println("Clear EEPROM Memory!!!");
         eepromClearMemory();

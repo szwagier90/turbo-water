@@ -13,9 +13,30 @@ struct Eeprom {
 
 Eeprom eeprom = {0};
 
+void readEepromMemory();
 bool loadEepromData(Sensor & sensor);
 void saveCalibrationData(Sensor & sensor);
 void eepromClearMemory();
+
+void readEepromMemory()
+{
+  EEPROM.begin(sizeof(Eeprom));
+  delay(20);
+  EEPROM.get(0, eeprom);
+
+  Serial.print("EEPROM Length: ");
+  Serial.println(EEPROM.length());
+  Serial.print("EEPROM: SMMin - ");
+  Serial.print(eeprom.soilMoistureDry);
+  Serial.print(" | SMMax -  ");
+  Serial.print(eeprom.soilMoistureWet);
+  Serial.print(" | Version -  ");
+  Serial.println(eeprom.version);
+
+  Serial.println("EEPROM: Data read");
+
+  EEPROM.end();
+}
 
 bool loadEepromData(Sensor & sensor)
 {
