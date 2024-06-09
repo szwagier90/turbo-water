@@ -6,6 +6,8 @@ const char * menu2str(int m)
   {
     case SENSOR_STATUS:
       return "SENSOR_STATUS";
+    case SENSOR_CALIBRATION:
+      return "SENSOR_CALIBRATION";
     case PUMP_STATUS:
       return "PUMP_STATUS";
     case FACTORY_RESET:

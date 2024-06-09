@@ -82,12 +82,6 @@ void loop() {
   {
     case STATE_CALIBRATION:
       calibration();
-
-      if(button.isPressed())
-      {
-        sensor.state = STATE_NORMAL;
-        saveCalibrationData(sensor);
-      }
       break;
     case STATE_NORMAL:
       normal();
@@ -216,6 +210,13 @@ void handleMenu()
   switch(menuIndex)
   {
     case SENSOR_STATUS:
+      break;
+    case SENSOR_CALIBRATION:
+      if(isShortDetected)
+      {
+        sensor.state = STATE_NORMAL;
+        saveCalibrationData(sensor);
+      }
       break;
     case PUMP_STATUS:
       break;

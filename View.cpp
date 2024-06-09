@@ -4,6 +4,7 @@
 
 MenuItem menu[MENU_SIZE] = {
   {"Moisture", "ADC:     |%:    "},
+  {"Sensor Calib ", "Sensor: --------"},
   {"Pump State", "Pump:    "},
   {"FACTORY RESET", "LONGPRESS TO RST"}
 };
@@ -58,6 +59,9 @@ void View::update()
   case SENSOR_STATUS:
     sensorStatusView();
     break;
+  case SENSOR_CALIBRATION:
+    sensorCalibrationView();
+    break;
   case PUMP_STATUS:
     pumpStatusView();
     break;
@@ -75,6 +79,12 @@ void View::sensorStatusView()
     lcd.setCursor(13, 1);
     lcd.print(model.moisturePercent);
   }
+}
+
+void View::sensorCalibrationView()
+{
+  lcd.setCursor(8, 1);
+  lcd.print("Unknown ");
 }
 
 void View::pumpStatusView()
