@@ -17,6 +17,8 @@ struct Sensor
     States s = STATE_CALIBRATION
   );
 
+  void calibrate(uint16_t dry, uint16_t wet);
+
   uint16_t soilMoistureDry;
   uint16_t soilMoistureWet;
   States state;

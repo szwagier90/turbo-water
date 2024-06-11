@@ -212,9 +212,9 @@ void handleMenu()
     case SENSOR_STATUS:
       break;
     case SENSOR_CALIBRATION:
-      if(isShortDetected)
+      if(isLongDetected)
       {
-        sensor.state = STATE_NORMAL;
+        sensor.calibrate(sensor.soilMoistureDry, sensor.soilMoistureWet);
         saveCalibrationData(sensor);
       }
       break;
