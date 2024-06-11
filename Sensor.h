@@ -17,6 +17,7 @@ struct Sensor
     States s = Sensor_NonCalibrated
   );
 
+  void reset();
   void calibrate(uint16_t dry, uint16_t wet);
 
   uint16_t soilMoistureDry;

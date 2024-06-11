@@ -229,7 +229,7 @@ void handleMenu()
       {
         Serial.println("Clear EEPROM Memory!!!");
         eepromClearMemory();
-        sensor.state = Sensor_NonCalibrated;
+        sensor.reset();
       }
       break;
   }

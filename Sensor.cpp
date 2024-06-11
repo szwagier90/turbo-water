@@ -12,3 +12,8 @@ void Sensor::calibrate(uint16_t dry, uint16_t wet)
 
   state = Sensor_CalibrationOK;
 }
+
+void Sensor::reset()
+{
+  state = Sensor_NonCalibrated;
+}
