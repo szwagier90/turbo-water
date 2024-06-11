@@ -5,8 +5,8 @@
 
 typedef enum
 {
-  STATE_CALIBRATION,
-  STATE_NORMAL
+  Sensor_NonCalibrated,
+  Sensor_CalibrationOK
 } States;
 
 struct Sensor
@@ -14,7 +14,7 @@ struct Sensor
   Sensor(
     uint16_t dry = 10000,
     uint16_t wet = 0,
-    States s = STATE_CALIBRATION
+    States s = Sensor_NonCalibrated
   );
 
   void calibrate(uint16_t dry, uint16_t wet);

@@ -63,11 +63,11 @@ void setup() {
 
   if(!loadEepromData(sensor))
   {
-    sensor.state = STATE_CALIBRATION;
+    sensor.state = Sensor_NonCalibrated;
   }
   else
   {
-    sensor.state = STATE_NORMAL;
+    sensor.state = Sensor_CalibrationOK;
   }
 }
 
@@ -80,10 +80,10 @@ void loop() {
 
   switch(sensor.state)
   {
-    case STATE_CALIBRATION:
+    case Sensor_NonCalibrated:
       calibration();
       break;
-    case STATE_NORMAL:
+    case Sensor_CalibrationOK:
       normal();
       break;
   }
@@ -229,7 +229,7 @@ void handleMenu()
       {
         Serial.println("Clear EEPROM Memory!!!");
         eepromClearMemory();
-        sensor.state = STATE_CALIBRATION;
+        sensor.state = Sensor_NonCalibrated;
       }
       break;
   }
