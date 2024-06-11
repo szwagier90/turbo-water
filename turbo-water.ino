@@ -212,11 +212,7 @@ void handleMenu()
     case SENSOR_STATUS:
       break;
     case SENSOR_CALIBRATION:
-      if(isLongDetected)
-      {
-        sensor.calibrate(sensor.soilMoistureDry, sensor.soilMoistureWet);
-        saveCalibrationData(sensor);
-      }
+      handleCalibration();
       break;
     case PUMP_STATUS:
       break;
@@ -232,5 +228,14 @@ void handleMenu()
         sensor.reset();
       }
       break;
+  }
+}
+
+void handleCalibration()
+{
+  if(isLongDetected)
+  {
+    sensor.calibrate(sensor.soilMoistureDry, sensor.soilMoistureWet);
+    saveCalibrationData(sensor);
   }
 }
