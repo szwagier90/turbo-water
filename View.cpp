@@ -99,6 +99,7 @@ void View::sensorCalibrationView()
       lcd.print("Wet ");
       break;
     case Calibration_Confirm:
+      lcd.print("Save? ");
       break;
     default:
       lcd.print("Unknown ");

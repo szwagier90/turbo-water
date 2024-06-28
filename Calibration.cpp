@@ -32,3 +32,9 @@ void Calibration::saveWetValue(unsigned val)
   state = Calibration_Confirm;
   Serial.println(F("Calibration state set to Calibration_Confirm"));
 }
+
+void Calibration::calibrateSensor()
+{
+  Serial.println(F("Calibration::calibrateSensor"));
+  sensor->calibrate(this->dry, this->wet);
+}

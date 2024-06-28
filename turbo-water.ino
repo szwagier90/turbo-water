@@ -261,6 +261,11 @@ Calibration_States handleCalibration()
       }
       break;
     case Calibration_Confirm:
+      if(isShortDetected)
+      {
+        cal.calibrateSensor();
+        saveCalibrationData(sensor);
+      }
       break;
   }
 

@@ -20,6 +20,7 @@ struct Calibration
   void startCalibration(Sensor * sensor);
   void saveDryValue(unsigned val);
   void saveWetValue(unsigned val);
+  void calibrateSensor();
 
   Calibration_States state;
 
