@@ -29,4 +29,6 @@ void Calibration::saveWetValue(unsigned val)
   this->wet = val;
   Serial.print(F("Calibration Wet val set to: "));
   Serial.println(this->wet);
+  state = Calibration_Confirm;
+  Serial.println(F("Calibration state set to Calibration_Confirm"));
 }

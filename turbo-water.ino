@@ -260,6 +260,8 @@ Calibration_States handleCalibration()
         cal.saveWetValue(model.moistureAdcValue);
       }
       break;
+    case Calibration_Confirm:
+      break;
   }
 
   return cal.state;

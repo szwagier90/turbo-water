@@ -7,7 +7,8 @@ typedef enum
 {
   Calibration_Ready,
   Calibration_Dry,
-  Calibration_Wet
+  Calibration_Wet,
+  Calibration_Confirm
 } Calibration_States;
 
 struct Calibration
