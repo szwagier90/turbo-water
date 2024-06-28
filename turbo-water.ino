@@ -214,7 +214,7 @@ void handleMenu()
     case SENSOR_STATUS:
       break;
     case SENSOR_CALIBRATION:
-      handleCalibration();
+      model.calibrationState = handleCalibration();
       break;
     case PUMP_STATUS:
       break;
@@ -233,7 +233,7 @@ void handleMenu()
   }
 }
 
-void handleCalibration()
+Calibration_States handleCalibration()
 {
   switch(cal.state)
   {
@@ -245,4 +245,6 @@ void handleCalibration()
       }
       break;
   }
+
+  return cal.state;
 }
