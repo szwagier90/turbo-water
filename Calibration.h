@@ -12,6 +12,8 @@ struct Calibration
     Calibration_States s = Calibration_Ready
   );
 
+  void startCalibration();
+
   Calibration_States state;
 };
 

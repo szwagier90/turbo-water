@@ -2,6 +2,8 @@
 
 #include <Arduino.h>
 
+#include "Calibration.h"
+
 MenuItem menu[MENU_SIZE] = {
   {"Moisture", "ADC:     |%:    "},
   {"Sensor Calib ", "Sensor: --------"},
@@ -84,7 +86,16 @@ void View::sensorStatusView()
 void View::sensorCalibrationView()
 {
   lcd.setCursor(8, 1);
-  lcd.print("Unknown ");
+
+  switch(model.calibrationState)
+  {
+    case Calibration_Ready:
+      lcd.print("Ready ");
+      break;
+    default:
+      lcd.print("Unknown ");
+      break;
+  }
 }
 
 void View::pumpStatusView()
