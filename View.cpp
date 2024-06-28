@@ -92,6 +92,12 @@ void View::sensorCalibrationView()
     case Calibration_Ready:
       lcd.print("Ready ");
       break;
+    case Calibration_Dry:
+      lcd.print("Dry ");
+      break;
+    case Calibration_Wet:
+      lcd.print("Wet ");
+      break;
     default:
       lcd.print("Unknown ");
       break;

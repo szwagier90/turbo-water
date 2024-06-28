@@ -1,9 +1,13 @@
 #ifndef CALIBRATION_H
 #define CALIBRATION_H
 
+#include "Sensor.h"
+
 typedef enum
 {
-  Calibration_Ready
+  Calibration_Ready,
+  Calibration_Dry,
+  Calibration_Wet
 } Calibration_States;
 
 struct Calibration
@@ -12,9 +16,16 @@ struct Calibration
     Calibration_States s = Calibration_Ready
   );
 
-  void startCalibration();
+  void startCalibration(Sensor * sensor);
+  void saveDryValue(unsigned val);
+  void saveWetValue(unsigned val);
 
   Calibration_States state;
+
+private:
+  Sensor * sensor;
+  unsigned dry;
+  unsigned wet;
 };
 
 #endif

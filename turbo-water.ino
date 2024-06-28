@@ -240,12 +240,24 @@ Calibration_States handleCalibration()
     case Calibration_Ready:
       if(isShortDetected)
       {
-        cal.startCalibration();
+        cal.startCalibration(&sensor);
       }
       else if(isLongDetected)
       {
         sensor.calibrate(sensor.soilMoistureDry, sensor.soilMoistureWet);
         saveCalibrationData(sensor);
+      }
+      break;
+    case Calibration_Dry:
+      if(isShortDetected)
+      {
+        cal.saveDryValue(model.moistureAdcValue);
+      }
+      break;
+    case Calibration_Wet:
+      if(isShortDetected)
+      {
+        cal.saveWetValue(model.moistureAdcValue);
       }
       break;
   }
