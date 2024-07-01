@@ -39,4 +39,5 @@ void Calibration::calibrateSensor()
   sensor->calibrate(this->dry, this->wet);
   state = Calibration_Ready;
   Serial.println(F("Calibration Finished, state set to Calibration_Ready"));
+  sensor = nullptr;
 }
