@@ -5,6 +5,7 @@
 
 #include <ezButton.h>
 
+#include "Calibration.h"
 #include "Model.h"
 #include "MyEeprom.h"
 #include "Plant.h"
@@ -24,6 +25,7 @@ bool isPressing = false;
 bool isShortDetected = false;
 bool isLongDetected = false;
 
+Calibration cal;
 Sensor sensor;
 
 Plant plant;
@@ -212,7 +214,7 @@ void handleMenu()
     case SENSOR_STATUS:
       break;
     case SENSOR_CALIBRATION:
-      handleCalibration();
+      model.calibrationState = handleCalibration();
       break;
     case PUMP_STATUS:
       break;
@@ -231,11 +233,41 @@ void handleMenu()
   }
 }
 
-void handleCalibration()
+Calibration_States handleCalibration()
 {
-  if(isLongDetected)
+  switch(cal.state)
   {
-    sensor.calibrate(sensor.soilMoistureDry, sensor.soilMoistureWet);
-    saveCalibrationData(sensor);
+    case Calibration_Ready:
+      if(isShortDetected)
+      {
+        cal.startCalibration(&sensor);
+      }
+      else if(isLongDetected)
+      {
+        sensor.calibrate(sensor.soilMoistureDry, sensor.soilMoistureWet);
+        saveCalibrationData(sensor);
+      }
+      break;
+    case Calibration_Dry:
+      if(isShortDetected)
+      {
+        cal.saveDryValue(model.moistureAdcValue);
+      }
+      break;
+    case Calibration_Wet:
+      if(isShortDetected)
+      {
+        cal.saveWetValue(model.moistureAdcValue);
+      }
+      break;
+    case Calibration_Confirm:
+      if(isShortDetected)
+      {
+        cal.calibrateSensor();
+        saveCalibrationData(sensor);
+      }
+      break;
   }
+
+  return cal.state;
 }
