@@ -83,7 +83,6 @@ void loop() {
   switch(sensor.state)
   {
     case Sensor_NonCalibrated:
-      calibration();
       break;
     case Sensor_CalibrationOK:
       normal();
@@ -96,14 +95,6 @@ void loop() {
 
   isShortDetected = false;
   isLongDetected = false;
-}
-
-void calibration()
-{
-  if (sensorValue < sensor.soilMoistureWet)
-    sensor.soilMoistureWet = sensorValue;
-  if (sensorValue > sensor.soilMoistureDry)
-    sensor.soilMoistureDry = sensorValue;
 }
 
 void normal()
