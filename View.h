@@ -4,7 +4,7 @@
 #include "Model.h"
 #include "LiquidCrystal_I2C.h"
 
-#define MENU_SIZE 4
+#define MENU_SIZE 5
 
 struct MenuItem {
   String title;

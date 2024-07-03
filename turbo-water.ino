@@ -213,6 +213,8 @@ void handleMenu()
       break;
     case PUMP_STATUS:
       break;
+    case PUMP_CALIBRATION:
+      break;
     case FACTORY_RESET:
       if(isShortDetected)
       {

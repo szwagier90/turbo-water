@@ -8,6 +8,7 @@ MenuItem menu[MENU_SIZE] = {
   {"Moisture", "ADC:     |%:    "},
   {"Sensor Calib ", "Sensor: --------"},
   {"Pump State", "Pump:    "},
+  {"Pump Calibration", "Pump:    "},
   {"FACTORY RESET", "LONGPRESS TO RST"}
 };
 
