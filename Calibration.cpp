@@ -9,6 +9,7 @@ void Calibration::startCalibration(Sensor * s)
 {
   Serial.println(F("Calibration::startCalibration"));
   this->sensor = s;
+  this->sensor->reset();
   state = Calibration_Dry;
   Serial.println(F("Calibration state set to Calibration_Dry"));
 }
