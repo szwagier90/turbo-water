@@ -25,7 +25,7 @@ bool isPressing = false;
 bool isShortDetected = false;
 bool isLongDetected = false;
 
-Calibration cal;
+Calibration sensorCalibration;
 Sensor sensor;
 
 Plant plant;
@@ -230,12 +230,12 @@ void handleMenu()
 
 Calibration_States handleCalibration()
 {
-  switch(cal.state)
+  switch(sensorCalibration.state)
   {
     case Calibration_Ready:
       if(isShortDetected)
       {
-        cal.startCalibration(&sensor);
+        sensorCalibration.startCalibration(&sensor);
       }
       else if(isLongDetected)
       {
@@ -246,23 +246,23 @@ Calibration_States handleCalibration()
     case Calibration_Dry:
       if(isShortDetected)
       {
-        cal.saveDryValue(model.moistureAdcValue);
+        sensorCalibration.saveDryValue(model.moistureAdcValue);
       }
       break;
     case Calibration_Wet:
       if(isShortDetected)
       {
-        cal.saveWetValue(model.moistureAdcValue);
+        sensorCalibration.saveWetValue(model.moistureAdcValue);
       }
       break;
     case Calibration_Confirm:
       if(isShortDetected)
       {
-        cal.calibrateSensor();
+        sensorCalibration.calibrateSensor();
         saveCalibrationData(sensor);
       }
       break;
   }
 
-  return cal.state;
+  return sensorCalibration.state;
 }
