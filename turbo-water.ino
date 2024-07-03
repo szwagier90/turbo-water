@@ -83,6 +83,10 @@ void loop() {
   switch(sensor.state)
   {
     case Sensor_NonCalibrated:
+      if(pump.isActivated())
+      {
+        pump.pumpOff();
+      }
       break;
     case Sensor_CalibrationOK:
       normal();
