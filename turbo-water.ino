@@ -10,6 +10,7 @@
 #include "MyEeprom.h"
 #include "Plant.h"
 #include "Pump.h"
+#include "PumpCalibration.h"
 #include "Sensor.h"
 #include "View.h"
 
@@ -27,6 +28,8 @@ bool isLongDetected = false;
 
 Calibration sensorCalibration;
 Sensor sensor;
+
+PumpCalibration pumpCalibration;
 
 Plant plant;
 
@@ -214,6 +217,7 @@ void handleMenu()
     case PUMP_STATUS:
       break;
     case PUMP_CALIBRATION:
+      handlePumpCalibration();
       break;
     case FACTORY_RESET:
       if(isShortDetected)
@@ -267,4 +271,8 @@ Calibration_States handleCalibration()
   }
 
   return sensorCalibration.state;
+}
+
+void handlePumpCalibration()
+{
 }
