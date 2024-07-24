@@ -3,6 +3,7 @@
 #include <Arduino.h>
 
 #include "Calibration.h"
+#include "PumpCalibration.h"
 
 MenuItem menu[MENU_SIZE] = {
   {"Moisture", "ADC:     |%:    "},
@@ -68,6 +69,9 @@ void View::update()
   case PUMP_STATUS:
     pumpStatusView();
     break;
+  case PUMP_CALIBRATION:
+    pumpCalibrationView();
+    break;
   case FACTORY_RESET:
     factoryResetView();
   }
@@ -115,6 +119,18 @@ void View::pumpStatusView()
     pumpOnOffState = model.pumpOnOffState;
     lcd.setCursor(6, 1);
     lcd.print(pumpOnOffState ? "On " : "Off");
+  }
+}
+
+void View::pumpCalibrationView()
+{
+  lcd.setCursor(6, 1);
+
+  switch(model.pumpCalibrationState)
+  {
+    case PumpCalibration_Ready:
+      lcd.print("Rdy to Cal");
+      break;
   }
 }
 

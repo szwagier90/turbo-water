@@ -17,6 +17,7 @@ struct Model
   unsigned moistureAdcValue;
   unsigned moisturePercent;
   unsigned short calibrationState;
+  unsigned short pumpCalibrationState;
   bool pumpOnOffState;
 };
 

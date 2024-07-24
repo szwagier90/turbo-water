@@ -24,6 +24,7 @@ private:
   void sensorStatusView();
   void sensorCalibrationView();
   void pumpStatusView();
+  void pumpCalibrationView();
   void factoryResetView();
 
   Model & model;

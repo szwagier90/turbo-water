@@ -217,7 +217,7 @@ void handleMenu()
     case PUMP_STATUS:
       break;
     case PUMP_CALIBRATION:
-      handlePumpCalibration();
+      model.pumpCalibrationState = handlePumpCalibration();
       break;
     case FACTORY_RESET:
       if(isShortDetected)
@@ -273,6 +273,7 @@ Calibration_States handleCalibration()
   return sensorCalibration.state;
 }
 
-void handlePumpCalibration()
+PumpCalibration_States handlePumpCalibration()
 {
+  return pumpCalibration.state;
 }
