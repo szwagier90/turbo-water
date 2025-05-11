@@ -17,6 +17,8 @@ struct Calibration
     Calibration_States s = Calibration_Ready
   );
 
+  const char * state2str();
+
   void startCalibration(Sensor * sensor);
   void saveDryValue(unsigned val);
   void saveWetValue(unsigned val);

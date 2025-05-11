@@ -5,6 +5,17 @@
 Calibration::Calibration(Calibration_States s)
   : state(s) {}
 
+const char * Calibration::state2str()
+{
+  switch(state)
+  {
+    case Calibration_Ready:
+      return "Standby";
+    default:
+      return "UNKNOWN";
+  }
+}
+
 void Calibration::startCalibration(Sensor * s)
 {
   Serial.println(F("Calibration::startCalibration"));

@@ -35,6 +35,7 @@ void View::lcdInit()
 
 void View::initSplash()
 {
+  Serial.println("LCD Splash");
   lcd.print(" PLANT WATERING ");
   lcd.setCursor(0,1);
   lcd.print("     SYSTEM     ");

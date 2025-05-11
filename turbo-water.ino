@@ -40,8 +40,6 @@ const int sensorPin = A0;
 int sensorValue = 0;
 int soilMoisturePercent = 0;
 
-unsigned buttonInput = 0;
-
 #define ENCODER_PIN_A D6
 #define ENCODER_PIN_B D7
 
@@ -96,6 +94,16 @@ void loop() {
       break;
   }
 
+  //  Serial.print("MIN: ");
+  //  Serial.print(soilMoistureMin);
+  //  Serial.print(" | MAX: ");
+  //  Serial.print(soilMoistureMax);
+  //  Serial.print(" | CUR: ");
+  //  Serial.print(sensorValue);
+  //  Serial.print(" | %: ");
+  //  Serial.print(soilMoisturePercent);
+  //  Serial.print(" | PUMP: ");
+  //  Serial.println(pumpOutput);
 
   digitalWrite(pumpOutputPin, pumpOutput);
   v.update();
@@ -191,9 +199,9 @@ void handleButton()
 void handleMenu()
 {
   int newMenuIndex = (encoder.read() / 4) % MENU_SIZE;
-  if(newMenuIndex < 0)
+  if (newMenuIndex < 0)
   {
-    encoder.write((MENU_SIZE - 1) * 4);
+    encoder.write(1000000 * MENU_SIZE);
     newMenuIndex = MENU_SIZE - 1;
   }
 
@@ -242,6 +250,7 @@ Calibration_States handleCalibration()
       if(isShortDetected)
       {
         sensorCalibration.startCalibration(&sensor);
+        saveCalibrationData(sensor, sensorValue);
       }
       else if(isLongDetected)
       {
