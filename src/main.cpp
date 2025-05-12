@@ -12,6 +12,7 @@ App app(
 void setup()
 {
     app.setup();
+    Serial.println("SERIAL INIT");
 }
 
 void loop()
