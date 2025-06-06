@@ -11,12 +11,29 @@ App app(
 
 void setup()
 {
+    delay(100);
     app.setup();
+    delay(100);
     Serial.println("SERIAL INIT");
+
+    lcdInit();
 }
 
 void loop()
 {
+}
+
+void lcdInit()
+{
+  Serial.println("LCD Initialization");
+
+  lcd.init(4, 5);
+  lcd.backlight();
+  lcd.print(" PLANT WATERING ");
+  lcd.setCursor(0,1);
+  lcd.print("     SYSTEM     ");
+  delay(2000);
+  lcd.clear();
 }
 
 #else
