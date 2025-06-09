@@ -6,6 +6,8 @@
 
 class MockSerial : public ISerial
 {
+public:
+    MOCK_METHOD(void, begin, (unsigned long), (override));
 };
 
 #endif // MOCK_SERIAL_H

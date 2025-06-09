@@ -11,6 +11,9 @@ TEST(AppTest, HelloWorld)
     App app(
         serial
     );
+
+    EXPECT_CALL(serial, begin(115200));
+    app.setup();
 }
 
 int main(int argc, char **argv)
