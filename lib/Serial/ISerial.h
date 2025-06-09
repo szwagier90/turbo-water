@@ -4,6 +4,7 @@
 class ISerial
 {
 public:
+    virtual void begin(unsigned long baud) = 0;
     virtual ~ISerial() = default;
 };
 
