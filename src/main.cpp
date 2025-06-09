@@ -1,6 +1,11 @@
 #ifdef ARDUINO
 #include <Arduino.h>
 
+#include <App.h>
+
+App app(
+);
+
 void setup()
 {
 }
