@@ -2,7 +2,12 @@
 
 #include <App.h>
 
+#include "mocks/mock_serial.h"
+
 TEST(AppTest, PeripherialsInitialization)
 {
-    App app;
+    MockSerial serial;
+    App app(
+        serial
+    );
 }

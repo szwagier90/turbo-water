@@ -2,8 +2,11 @@
 #include <Arduino.h>
 
 #include <App.h>
+#include <SerialAdapter.h>
 
+SerialAdapter serial;
 App app(
+    serial
 );
 
 void setup()
