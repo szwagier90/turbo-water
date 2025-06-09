@@ -1,13 +1,14 @@
 #include <gtest/gtest.h>
+#include <gmock/gmock.h>
 
-TEST(DummyTest, gtest_test)
+TEST(TestTest, TestTest)
 {
-    EXPECT_EQ(1, 1);
+    EXPECT_TRUE(true);
 }
 
 int main(int argc, char **argv)
 {
-    ::testing::InitGoogleTest(&argc, argv);
+    ::testing::InitGoogleMock(&argc, argv);
     if (RUN_ALL_TESTS())
     ;
     // Always return zero-code and allow PlatformIO to parse results
