@@ -7,6 +7,7 @@ class App
 {
 public:
     App(ISerial& serial);
+    void setup();
 
 private:
     ISerial& serial;

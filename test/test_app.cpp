@@ -1,4 +1,5 @@
 #include <gtest/gtest.h>
+#include <gmock/gmock.h>
 
 #include <App.h>
 
@@ -10,4 +11,7 @@ TEST(AppTest, Serial_InitMessage)
     App app(
         serial
     );
+
+    EXPECT_CALL(serial, begin(115200));
+    app.setup();
 }
