@@ -3,9 +3,14 @@
 
 #include <App.h>
 
+#include "include/mock_serial.h"
+
 TEST(AppTest, HelloWorld)
 {
-    App app;
+    MockSerial serial;
+    App app(
+        serial
+    );
 }
 
 int main(int argc, char **argv)
