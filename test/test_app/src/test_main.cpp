@@ -5,6 +5,8 @@
 
 #include "include/mock_serial.h"
 
+using ::testing::StrEq;
+
 TEST(AppTest, HelloWorld)
 {
     MockSerial serial;
@@ -13,7 +15,7 @@ TEST(AppTest, HelloWorld)
     );
 
     EXPECT_CALL(serial, begin(115200));
-    EXPECT_CALL(serial, println);
+    EXPECT_CALL(serial, println(StrEq("SERIAL_INIT")));
     app.setup();
 }
 
