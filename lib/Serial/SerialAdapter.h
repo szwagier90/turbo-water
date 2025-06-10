@@ -12,6 +12,11 @@ public:
     {
         Serial.begin(baud);
     };
+
+    void println(const char* msg) override
+    {
+        Serial.println(msg);
+    };
 };
 
 #endif // SERIAL_ADAPTER_H

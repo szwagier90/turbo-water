@@ -13,5 +13,6 @@ TEST(AppTest, PeripherialsInitialization)
     );
 
     EXPECT_CALL(serial, begin(115200));
+    EXPECT_CALL(serial, println);
     app.setup();
 }

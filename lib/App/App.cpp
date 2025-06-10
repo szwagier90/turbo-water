@@ -6,6 +6,7 @@ App::App(
 
 void App::setup() {
     serial.begin(115200);
+    serial.println("test");
 };
 
 void App::loop()
