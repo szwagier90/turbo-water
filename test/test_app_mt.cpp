@@ -24,5 +24,6 @@ TEST(AppTest, PeripherialsInitialization)
     EXPECT_CALL(lcd, print(" PLANT WATERING "));
     EXPECT_CALL(lcd, setCursor(0, 1));
     EXPECT_CALL(lcd, print("     SYSTEM     "));
+    EXPECT_CALL(serial, println(StrEq("LCD Initialization")));
     app.setup();
 }

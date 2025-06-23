@@ -17,6 +17,8 @@ void App::setup() {
     lcd.print(" PLANT WATERING ");
     lcd.setCursor(0,1);
     lcd.print("     SYSTEM     ");
+
+    serial.println("LCD Initialization");
 };
 
 void App::loop()
