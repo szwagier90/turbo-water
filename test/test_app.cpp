@@ -19,6 +19,7 @@ TEST(AppTest, Serial_InitMessage)
 
     EXPECT_CALL(serial, begin(115200));
     EXPECT_CALL(serial, println(StrEq("SERIAL_INIT")));
+    EXPECT_CALL(serial, println(StrEq("LCD Initialization")));
     app.setup();
 }
 
