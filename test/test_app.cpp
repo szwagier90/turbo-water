@@ -32,5 +32,6 @@ TEST(AppTest, Lcd_InitMessage)
     );
 
     EXPECT_CALL(lcd, init(4, 5));
+    EXPECT_CALL(lcd, backlight);
     app.setup();
 }
