@@ -30,4 +30,7 @@ TEST(AppTest, Lcd_InitMessage)
         serial,
         lcd
     );
+
+    EXPECT_CALL(lcd, init(4, 5));
+    app.setup();
 }
