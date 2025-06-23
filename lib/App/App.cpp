@@ -1,8 +1,12 @@
 #include "App.h"
 
 App::App(
-    ISerial& serial
-) : serial(serial) {}
+    ISerial& serial,
+    ILcd& lcd
+) :
+    serial(serial),
+    lcd(lcd)
+{}
 
 void App::setup() {
     serial.begin(115200);
