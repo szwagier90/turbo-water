@@ -37,5 +37,6 @@ TEST(AppTest, Lcd_InitMessage)
     EXPECT_CALL(lcd, print(" PLANT WATERING "));
     EXPECT_CALL(lcd, setCursor(0, 1));
     EXPECT_CALL(lcd, print("     SYSTEM     "));
+    EXPECT_CALL(lcd, clear);
     app.setup();
 }

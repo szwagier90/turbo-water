@@ -19,4 +19,5 @@ void App::setup() {
     lcd.print("     SYSTEM     ");
 
     serial.println("LCD Initialization");
+    lcd.clear();
 };

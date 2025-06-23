@@ -7,6 +7,7 @@ class MockLcd : public ILcd
 {
 public:
     MOCK_METHOD(void, init, (uint8_t, uint8_t), (override));
+    MOCK_METHOD(void, clear, (), (override));
     MOCK_METHOD(void, print, (const std::string&), (override));
     MOCK_METHOD(void, backlight, (), (override));
     MOCK_METHOD(void, setCursor, (uint8_t, uint8_t), (override));
