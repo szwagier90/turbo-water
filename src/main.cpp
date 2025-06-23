@@ -3,10 +3,13 @@
 
 #include <App.h>
 #include <SerialAdapter.h>
+#include <LcdAdapter.h>
 
 SerialAdapter serial;
+LcdAdapter lcd(0x27,16,2);  // I2C address: 0x27 | LCD: 16x2
 App app(
     serial
+    , lcd
 );
 
 void setup()
