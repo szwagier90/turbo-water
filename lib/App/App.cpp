@@ -13,6 +13,7 @@ void App::setup() {
     serial.println("SERIAL_INIT");
 
     lcd.init(4, 5);
+    lcd.backlight();
 };
 
 void App::loop()

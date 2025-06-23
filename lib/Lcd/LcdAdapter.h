@@ -16,6 +16,11 @@ public:
         lcd.init(sdaPort, sclPort);
     }
 
+    void backlight() override
+    {
+        lcd.backlight();
+    }
+
 private:
     LiquidCrystal_I2C lcd;
 };

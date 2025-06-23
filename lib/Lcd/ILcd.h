@@ -7,6 +7,7 @@ class ILcd
 {
 public:
     virtual void init(uint8_t sdaPort, uint8_t sclPort) = 0;
+    virtual void backlight() = 0;
     virtual ~ILcd() = default;
 };
 
