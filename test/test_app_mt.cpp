@@ -22,5 +22,7 @@ TEST(AppTest, PeripherialsInitialization)
     EXPECT_CALL(lcd, init(4, 5));
     EXPECT_CALL(lcd, backlight);
     EXPECT_CALL(lcd, print(" PLANT WATERING "));
+    EXPECT_CALL(lcd, setCursor(0, 1));
+    EXPECT_CALL(lcd, print("     SYSTEM     "));
     app.setup();
 }

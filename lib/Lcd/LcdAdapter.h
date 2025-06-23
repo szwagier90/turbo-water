@@ -26,6 +26,11 @@ public:
         lcd.backlight();
     }
 
+    void setCursor(uint8_t col, uint8_t row) override
+    {
+        lcd.setCursor(col, row);
+    }
+
 private:
     LiquidCrystal_I2C lcd;
 };
