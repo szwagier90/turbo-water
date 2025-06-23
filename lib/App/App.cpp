@@ -3,9 +3,11 @@
 App::App(
     ISerial& serial
     , ILcd& lcd
+    , IDelay& delay
 ) :
     serial(serial)
     , lcd(lcd)
+    , delay(delay)
 {}
 
 void App::setup() {
@@ -17,8 +19,9 @@ void App::setup() {
     lcd.print(" PLANT WATERING ");
     lcd.setCursor(0,1);
     lcd.print("     SYSTEM     ");
-
     serial.println("LCD Initialization");
+
+    delay.delay(2000);
     lcd.clear();
 };
 
