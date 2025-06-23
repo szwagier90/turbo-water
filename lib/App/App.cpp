@@ -14,6 +14,7 @@ void App::setup() {
 
     lcd.init(4, 5);
     lcd.backlight();
+    lcd.print(" PLANT WATERING ");
 };
 
 void App::loop()
