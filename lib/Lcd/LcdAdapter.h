@@ -16,6 +16,11 @@ public:
         lcd.init(sdaPort, sclPort);
     }
 
+    void print(const std::string& str) override
+    {
+        lcd.print(str.c_str());
+    }
+
     void backlight() override
     {
         lcd.backlight();

@@ -2,11 +2,13 @@
 #define I_LCD_H
 
 #include <stdint.h>
+#include <string>
 
 class ILcd
 {
 public:
     virtual void init(uint8_t sdaPort, uint8_t sclPort) = 0;
+    virtual void print(const std::string&) = 0;
     virtual void backlight() = 0;
     virtual ~ILcd() = default;
 };
