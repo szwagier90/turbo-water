@@ -3,21 +3,32 @@
 
 #include <App.h>
 
+#include <AnalogInput.h>
+#include <Pump.h>
+
 #include "mocks/mock_serial.h"
 #include "mocks/mock_lcd.h"
 #include "mocks/mock_delay.h"
+#include "mocks/mock_gpio.h"
+#include "mocks/mock_pump.h"
 
 using ::testing::StrEq;
+
+const int pumpGpioPin = 2;
 
 TEST(AppTest, PeripherialsInitialization)
 {
     MockSerial serial;
     MockLcd lcd;
     MockDelay delay;
+    MockGpio gpio;
+    EXPECT_CALL(gpio, pinMode);
+    Pump pump(gpio, pumpGpioPin);
     App app(
         serial
         , lcd
         , delay
+        , pump
     );
 
     EXPECT_CALL(serial, begin(115200));

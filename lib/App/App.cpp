@@ -4,10 +4,12 @@ App::App(
     ISerial& serial
     , ILcd& lcd
     , IDelay& delay
+    , IPump& pump
 ) :
     serial(serial)
     , lcd(lcd)
     , delay(delay)
+    , pump(pump)
 {}
 
 void App::setup() {
@@ -27,4 +29,5 @@ void App::setup() {
 
 void App::loop()
 {
+    pump.on();
 }
