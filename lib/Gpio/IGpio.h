@@ -10,10 +10,17 @@ enum class PinMode
     InputPullup
 };
 
+enum class PinOutput
+{
+    Low,
+    High
+};
+
 class IGpio
 {
 public:
     virtual void pinMode(uint8_t pin, PinMode mode) = 0;
+    virtual void digitalWrite(uint8_t pin, PinOutput mode) = 0;
 };
 
 #endif // I_GPIO_H

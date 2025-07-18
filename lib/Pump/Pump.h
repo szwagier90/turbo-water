@@ -12,14 +12,9 @@ public:
     Pump(
         IGpio& gpio
         , uint8_t pin
-    )
-        : gpio(gpio)
-        , pin(pin)
-    {
-        gpio.pinMode(pin, PinMode::Output);
-    }
+    );
 
-    void on() override {};
+    void on() override;
 
 private:
     IGpio& gpio;

@@ -15,6 +15,11 @@ public:
             mode == PinMode::Input ? INPUT :
             INPUT_PULLUP);
     }
+
+    void digitalWrite(uint8_t pin, PinOutput po) override
+    {
+        ::digitalWrite(pin, (uint8_t)po);
+    }
 };
 
 #endif // GPIO_ADAPTER_H
