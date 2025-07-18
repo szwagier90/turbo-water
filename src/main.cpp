@@ -5,12 +5,16 @@
 #include <SerialAdapter.h>
 #include <LcdAdapter.h>
 #include <DelayAdapter.h>
+#include <GpioAdapter.h>
 #include <Pump.h>
+
+const int pumpOutputPin = D5;
 
 SerialAdapter serial;
 LcdAdapter lcd(0x27,16,2);  // I2C address: 0x27 | LCD: 16x2
 DelayAdapter delayAdapter;
-Pump pump;
+GpioAdapter gpio;
+Pump pump(gpio, pumpOutputPin);
 App app(
     serial
     , lcd
