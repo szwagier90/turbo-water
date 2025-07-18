@@ -4,11 +4,13 @@ App::App(
     ISerial& serial
     , ILcd& lcd
     , IDelay& delay
+    , ISoilMoistureSensor& s_m_sensor
     , IPump& pump
 ) :
     serial(serial)
     , lcd(lcd)
     , delay(delay)
+    , s_m_sensor(s_m_sensor)
     , pump(pump)
 {}
 
@@ -29,5 +31,6 @@ void App::setup() {
 
 void App::loop()
 {
-    pump.on();
+    if(s_m_sensor.readPercent() < 20)
+        pump.on();
 }

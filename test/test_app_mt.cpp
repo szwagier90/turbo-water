@@ -5,15 +5,16 @@
 
 #include <AnalogInput.h>
 #include <Pump.h>
+#include <SoilMoistureSensor.h>
 
 #include "mocks/mock_serial.h"
 #include "mocks/mock_lcd.h"
 #include "mocks/mock_delay.h"
 #include "mocks/mock_gpio.h"
-#include "mocks/mock_pump.h"
 
 using ::testing::StrEq;
 
+const int sensorGpioPin = 1;
 const int pumpGpioPin = 2;
 
 TEST(AppTest, PeripherialsInitialization)
@@ -22,12 +23,15 @@ TEST(AppTest, PeripherialsInitialization)
     MockLcd lcd;
     MockDelay delay;
     MockGpio gpio;
+    AnalogInput analogInput(gpio, sensorGpioPin);
+    SoilMoistureSensor s_m_sensor(analogInput);
     EXPECT_CALL(gpio, pinMode);
     Pump pump(gpio, pumpGpioPin);
     App app(
         serial
         , lcd
         , delay
+        , s_m_sensor
         , pump
     );
 
