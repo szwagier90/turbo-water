@@ -6,6 +6,7 @@
 #include <LcdAdapter.h>
 #include <DelayAdapter.h>
 #include <GpioAdapter.h>
+#include <AnalogInput.h>
 #include <SoilMoistureSensor.h>
 #include <Pump.h>
 
@@ -15,7 +16,8 @@ SerialAdapter serial;
 LcdAdapter lcd(0x27,16,2);  // I2C address: 0x27 | LCD: 16x2
 DelayAdapter delayAdapter;
 GpioAdapter gpio;
-SoilMoistureSensor s_m_sensor;
+AnalogInput analogInput;
+SoilMoistureSensor s_m_sensor(analogInput);
 Pump pump(gpio, pumpOutputPin);
 App app(
     serial

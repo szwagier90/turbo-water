@@ -1,6 +1,13 @@
 #include "SoilMoistureSensor.h"
 
+SoilMoistureSensor::SoilMoistureSensor
+(
+    IAnalogInput& analogInput
+)
+    : analogInput(analogInput)
+{}
+
 int SoilMoistureSensor::readPercent() const
 {
-	return 0;
+	return (analogInput.read() * 100) / 1023;
 }
