@@ -33,4 +33,6 @@ void App::loop()
 {
     if(s_m_sensor.readPercent() < 20)
         pump.on();
+    else
+        pump.off();
 }

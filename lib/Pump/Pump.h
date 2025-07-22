@@ -15,6 +15,7 @@ public:
     );
 
     void on() override;
+    void off() override;
 
 private:
     IGpio& gpio;

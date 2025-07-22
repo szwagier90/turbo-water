@@ -14,3 +14,8 @@ void Pump::on()
 {
     gpio.digitalWrite(pin, PinOutput::High);
 }
+
+void Pump::off()
+{
+    gpio.digitalWrite(pin, PinOutput::Low);
+}

@@ -21,10 +21,23 @@ TEST(Pump_UT, TurnPumpOn)
     const int pumpGpioPin = 2;
 
     MockGpio gpio;
-    EXPECT_CALL(gpio, pinMode(pumpGpioPin, PinMode::Output));
+    EXPECT_CALL(gpio, pinMode);
 
     Pump pump(gpio, pumpGpioPin);
 
     EXPECT_CALL(gpio, digitalWrite(pumpGpioPin, PinOutput::High));
     pump.on();
+}
+
+TEST(Pump_UT, TurnPumpOff)
+{
+    const int pumpGpioPin = 2;
+
+    MockGpio gpio;
+    EXPECT_CALL(gpio, pinMode);
+
+    Pump pump(gpio, pumpGpioPin);
+
+    EXPECT_CALL(gpio, digitalWrite(pumpGpioPin, PinOutput::Low));
+    pump.off();
 }
