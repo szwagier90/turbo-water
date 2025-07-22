@@ -10,13 +10,14 @@
 #include <SoilMoistureSensor.h>
 #include <Pump.h>
 
+const int sensorGpioPin = A0;
 const int pumpOutputPin = D5;
 
 SerialAdapter serial;
 LcdAdapter lcd(0x27,16,2);  // I2C address: 0x27 | LCD: 16x2
 DelayAdapter delayAdapter;
 GpioAdapter gpio;
-AnalogInput analogInput;
+AnalogInput analogInput(gpio, sensorGpioPin);
 SoilMoistureSensor s_m_sensor(analogInput);
 Pump pump(gpio, pumpOutputPin);
 App app(

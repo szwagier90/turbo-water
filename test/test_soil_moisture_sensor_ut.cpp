@@ -8,7 +8,7 @@
 using ::testing::Return;
 
 
-TEST(SoilMoistureSensor_UT, Init)
+TEST(SoilMoistureSensor_UT, ReadPercentSimple)
 {
     MockAnalogInput analogInput;
     SoilMoistureSensor s_m_sensor(analogInput);

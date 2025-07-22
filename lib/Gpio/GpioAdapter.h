@@ -16,9 +16,19 @@ public:
             INPUT_PULLUP);
     }
 
+    int analogRead(uint8_t pin) override
+    {
+        return ::analogRead(pin);
+    }
+
     void digitalWrite(uint8_t pin, PinOutput po) override
     {
         ::digitalWrite(pin, (uint8_t)po);
+    }
+
+    void setAnalogReferenceExternal() override
+    {
+        ::analogReference(EXTERNAL);
     }
 };
 

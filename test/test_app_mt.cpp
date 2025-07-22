@@ -23,6 +23,8 @@ TEST(AppTest, PeripherialsInitialization)
     MockLcd lcd;
     MockDelay delay;
     MockGpio gpio;
+    EXPECT_CALL(gpio, pinMode);
+    EXPECT_CALL(gpio, setAnalogReferenceExternal);
     AnalogInput analogInput(gpio, sensorGpioPin);
     SoilMoistureSensor s_m_sensor(analogInput);
     EXPECT_CALL(gpio, pinMode);
