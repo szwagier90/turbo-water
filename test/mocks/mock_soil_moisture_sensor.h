@@ -6,6 +6,8 @@
 class MockSoilMoistureSensor : public ISoilMoistureSensor
 {
 public:
+    MOCK_METHOD(bool, isCalibrated, (), (const override));
+    MOCK_METHOD(void, calibrate, (), (override));
     MOCK_METHOD(int, readPercent, (), (const override));
 };
 

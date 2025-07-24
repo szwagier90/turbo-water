@@ -12,6 +12,7 @@
 #include "mocks/mock_delay.h"
 #include "mocks/mock_gpio.h"
 
+using ::testing::Return;
 using ::testing::StrEq;
 
 const int sensorGpioPin = 1;
@@ -48,4 +49,75 @@ TEST(AppTest, PeripherialsInitialization)
     EXPECT_CALL(delay, delay(2000));
     EXPECT_CALL(lcd, clear);
     app.setup();
+}
+
+TEST(AppTest, DontReadSensorIfNotCalibrated)
+{
+    MockSerial serial;
+    MockLcd lcd;
+    MockDelay delay;
+    MockGpio gpio;
+    EXPECT_CALL(gpio, pinMode);
+    EXPECT_CALL(gpio, setAnalogReferenceExternal);
+    AnalogInput analogInput(gpio, sensorGpioPin);
+    SoilMoistureSensor s_m_sensor(analogInput);
+    EXPECT_CALL(gpio, pinMode);
+    Pump pump(gpio, pumpGpioPin);
+    App app(
+        serial
+        , lcd
+        , delay
+        , s_m_sensor
+        , pump
+    );
+
+    EXPECT_CALL(serial, begin);
+    EXPECT_CALL(serial, println).Times(2);
+    EXPECT_CALL(lcd, init);
+    EXPECT_CALL(lcd, backlight);
+    EXPECT_CALL(lcd, print).Times(2);
+    EXPECT_CALL(lcd, setCursor);
+    EXPECT_CALL(delay, delay);
+    EXPECT_CALL(lcd, clear);
+    app.setup();
+
+    EXPECT_CALL(gpio, analogRead).Times(0);
+    EXPECT_CALL(gpio, digitalWrite).Times(0);
+    app.loop();
+}
+
+TEST(AppTest, ReadSensorIfCalibrated)
+{
+    MockSerial serial;
+    MockLcd lcd;
+    MockDelay delay;
+    MockGpio gpio;
+    EXPECT_CALL(gpio, pinMode);
+    EXPECT_CALL(gpio, setAnalogReferenceExternal);
+    AnalogInput analogInput(gpio, sensorGpioPin);
+    SoilMoistureSensor s_m_sensor(analogInput);
+    EXPECT_CALL(gpio, pinMode);
+    Pump pump(gpio, pumpGpioPin);
+    App app(
+        serial
+        , lcd
+        , delay
+        , s_m_sensor
+        , pump
+    );
+
+    EXPECT_CALL(serial, begin);
+    EXPECT_CALL(serial, println).Times(2);
+    EXPECT_CALL(lcd, init);
+    EXPECT_CALL(lcd, backlight);
+    EXPECT_CALL(lcd, print).Times(2);
+    EXPECT_CALL(lcd, setCursor);
+    EXPECT_CALL(delay, delay);
+    EXPECT_CALL(lcd, clear);
+    app.setup();
+
+    s_m_sensor.calibrate();
+    EXPECT_CALL(gpio, analogRead).Times(1);
+    EXPECT_CALL(gpio, digitalWrite).Times(1);
+    app.loop();
 }
