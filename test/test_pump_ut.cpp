@@ -16,28 +16,32 @@ TEST(Pump_UT, InitializeWithOutputPinMode)
     Pump pump(gpio, pumpGpioPin);
 }
 
-TEST(Pump_UT, TurnPumpOn)
+class Pump_Initialized_UT_Fixture : public ::testing::Test
 {
+protected:
+    void SetUp() override
+    {
+    }
+
+    void TearDown() override
+    {
+    }
+
     const int pumpGpioPin = 2;
-
     MockGpio gpio;
-    EXPECT_CALL(gpio, pinMode);
+    Pump pump;
 
-    Pump pump(gpio, pumpGpioPin);
+    Pump_Initialized_UT_Fixture() : pump(gpio, pumpGpioPin) {}
+};
 
+TEST_F(Pump_Initialized_UT_Fixture, TurnPumpOn)
+{
     EXPECT_CALL(gpio, digitalWrite(pumpGpioPin, PinOutput::High));
     pump.on();
 }
 
-TEST(Pump_UT, TurnPumpOff)
+TEST_F(Pump_Initialized_UT_Fixture, TurnPumpOff)
 {
-    const int pumpGpioPin = 2;
-
-    MockGpio gpio;
-    EXPECT_CALL(gpio, pinMode);
-
-    Pump pump(gpio, pumpGpioPin);
-
     EXPECT_CALL(gpio, digitalWrite(pumpGpioPin, PinOutput::Low));
     pump.off();
 }
