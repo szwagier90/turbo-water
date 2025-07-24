@@ -49,6 +49,7 @@ protected:
 
 TEST_F(ApplicationSimpleWateringFixture, DoNotTurnPumpOnWhenMoistureAboveThreshold)
 {
+    EXPECT_CALL(s_m_sensor, isCalibrated).WillOnce(Return(true));
     EXPECT_CALL(s_m_sensor, readPercent).WillOnce(Return(50));
     EXPECT_CALL(pump, on).Times(0);
     app.loop();
@@ -56,10 +57,18 @@ TEST_F(ApplicationSimpleWateringFixture, DoNotTurnPumpOnWhenMoistureAboveThresho
 
 TEST_F(ApplicationSimpleWateringFixture, TurnPumpOffWhenMoistureAboveThreshold)
 {
+    EXPECT_CALL(s_m_sensor, isCalibrated).WillRepeatedly(Return(true));
     EXPECT_CALL(s_m_sensor, readPercent).WillOnce(Return(19));
     EXPECT_CALL(pump, on).Times(1);
     app.loop();
     EXPECT_CALL(s_m_sensor, readPercent).WillOnce(Return(21));
     EXPECT_CALL(pump, off).Times(1);
+    app.loop();
+}
+
+TEST_F(ApplicationSimpleWateringFixture, DoNotWaterIfSensorNotCalibrated)
+{
+    EXPECT_CALL(s_m_sensor, isCalibrated).WillOnce(Return(false));
+    EXPECT_CALL(s_m_sensor, readPercent).Times(0);
     app.loop();
 }

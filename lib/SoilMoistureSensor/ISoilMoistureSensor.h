@@ -4,6 +4,10 @@
 class ISoilMoistureSensor
 {
 public:
+    virtual bool isCalibrated() const = 0;
+
+    virtual void calibrate() = 0;
+
     virtual int readPercent() const = 0;
 };
 

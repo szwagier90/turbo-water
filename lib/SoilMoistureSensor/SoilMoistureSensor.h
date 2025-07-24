@@ -14,10 +14,16 @@ public:
         IAnalogInput& analogInput
     );
 
+    virtual bool isCalibrated() const override;
+
+    virtual void calibrate() override;
+
     virtual int readPercent() const override;
 
 private:
     IAnalogInput& analogInput;
+
+    bool calibrated;
 };
 
 #endif // SOIL_MOISTURE_SENSOR_H
