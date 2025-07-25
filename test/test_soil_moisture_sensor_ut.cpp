@@ -8,28 +8,36 @@
 using ::testing::Return;
 
 
-TEST(SoilMoistureSensor_UT, ReadPercentSimple)
+class SoilMoistureSensor_Initialized_UT : public ::testing::Test
 {
-    MockAnalogInput analogInput;
-    SoilMoistureSensor s_m_sensor(analogInput);
+protected:
+    virtual void SetUp()
+    {
+    }
 
+    virtual void TearDown()
+    {
+    }
+
+    MockAnalogInput analogInput;
+    SoilMoistureSensor s_m_sensor;
+
+    SoilMoistureSensor_Initialized_UT() : s_m_sensor(analogInput) {}
+};
+
+TEST_F(SoilMoistureSensor_Initialized_UT, ReadPercentSimple)
+{
     EXPECT_CALL(analogInput, read).WillOnce(Return(205));
     EXPECT_EQ(s_m_sensor.readPercent(), 20);
 }
 
-TEST(SoilMoistureSensor_UT, ReadCalibrationStatus_false)
+TEST_F(SoilMoistureSensor_Initialized_UT, ReadCalibrationStatus_false)
 {
-    MockAnalogInput analogInput;
-    SoilMoistureSensor s_m_sensor(analogInput);
-
     EXPECT_EQ(s_m_sensor.isCalibrated(), false);
 }
 
-TEST(SoilMoistureSensor_UT, ReadCalibrationStatus_true)
+TEST_F(SoilMoistureSensor_Initialized_UT, ReadCalibrationStatus_true)
 {
-    MockAnalogInput analogInput;
-    SoilMoistureSensor s_m_sensor(analogInput);
-
     s_m_sensor.calibrate();
     EXPECT_EQ(s_m_sensor.isCalibrated(), true);
 }
