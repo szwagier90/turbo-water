@@ -9,8 +9,10 @@
 #include <AnalogInput.h>
 #include <SoilMoistureSensor.h>
 #include <Pump.h>
+#include <ButtonAdapter.h>
 
 const int sensorGpioPin = A0;
+const int buttonInputPin = D0;
 const int pumpOutputPin = D5;
 
 SerialAdapter serial;
@@ -20,12 +22,14 @@ GpioAdapter gpio;
 AnalogInput analogInput(gpio, sensorGpioPin);
 SoilMoistureSensor s_m_sensor(analogInput);
 Pump pump(gpio, pumpOutputPin);
+ButtonAdapter button(buttonInputPin);
 App app(
     serial
     , lcd
     , delayAdapter
     , s_m_sensor
     , pump
+    , button
 );
 
 void setup()
