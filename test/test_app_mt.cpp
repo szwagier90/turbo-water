@@ -7,6 +7,7 @@
 #include <Pump.h>
 #include <SoilMoistureSensor.h>
 
+#include "mocks/mock_button.h"
 #include "mocks/mock_serial.h"
 #include "mocks/mock_lcd.h"
 #include "mocks/mock_delay.h"
@@ -17,6 +18,7 @@ using ::testing::StrEq;
 
 const int sensorGpioPin = 1;
 const int pumpGpioPin = 2;
+const int buttonGpioPin = 0;
 
 TEST(AppTest, PeripherialsInitialization)
 {
@@ -31,12 +33,14 @@ TEST(AppTest, PeripherialsInitialization)
     SoilMoistureSensor s_m_sensor(analogInput);
     EXPECT_CALL(pumpGpio, pinMode);
     Pump pump(pumpGpio, pumpGpioPin);
+    MockButton button;
     App app(
         serial
         , lcd
         , delay
         , s_m_sensor
         , pump
+        , button
     );
 
     EXPECT_CALL(serial, begin(115200));
@@ -49,6 +53,7 @@ TEST(AppTest, PeripherialsInitialization)
     EXPECT_CALL(serial, println(StrEq("LCD Initialization")));
     EXPECT_CALL(delay, delay(2000));
     EXPECT_CALL(lcd, clear);
+    EXPECT_CALL(button, setDebounceTime);
     app.setup();
 }
 
@@ -65,6 +70,7 @@ protected:
         EXPECT_CALL(lcd, setCursor);
         EXPECT_CALL(delay, delay);
         EXPECT_CALL(lcd, clear);
+        EXPECT_CALL(button, setDebounceTime);
         app.setup();
     }
 
@@ -80,6 +86,7 @@ protected:
     AnalogInput analogInput;
     SoilMoistureSensor s_m_sensor;
     Pump pump;
+    MockButton button;
     App app;
 
     AppBasicSetupFixture() :
@@ -92,6 +99,7 @@ protected:
             , delay
             , s_m_sensor
             , pump
+            , button
         ) {};
 };
 
@@ -107,5 +115,11 @@ TEST_F(AppBasicSetupFixture, ReadSensorIfCalibrated)
     s_m_sensor.calibrate();
     EXPECT_CALL(sensorGpio, analogRead).Times(1);
     EXPECT_CALL(pumpGpio, digitalWrite).Times(1);
+    app.loop();
+}
+
+TEST_F(AppBasicSetupFixture, ButtonLoopAtTheBeginning)
+{
+    EXPECT_CALL(button, loop);
     app.loop();
 }

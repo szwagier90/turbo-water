@@ -6,6 +6,7 @@
 #include "IDelay.h"
 #include "ISoilMoistureSensor.h"
 #include "IPump.h"
+#include "IButton.h"
 
 class App
 {
@@ -16,6 +17,7 @@ public:
         , IDelay& delay
         , ISoilMoistureSensor& s_m_sensor
         , IPump& pump
+        , IButton& button
     );
     void setup();
     void loop();
@@ -26,6 +28,7 @@ private:
     IDelay& delay;
     ISoilMoistureSensor& s_m_sensor;
     IPump& pump;
+    IButton& button;
 };
 
 #endif // APP_H

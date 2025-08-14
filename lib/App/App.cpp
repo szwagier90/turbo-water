@@ -6,12 +6,14 @@ App::App(
     , IDelay& delay
     , ISoilMoistureSensor& s_m_sensor
     , IPump& pump
+    , IButton& button
 ) :
     serial(serial)
     , lcd(lcd)
     , delay(delay)
     , s_m_sensor(s_m_sensor)
     , pump(pump)
+    , button(button)
 {}
 
 void App::setup() {
@@ -25,12 +27,15 @@ void App::setup() {
     lcd.print("     SYSTEM     ");
     serial.println("LCD Initialization");
 
+    button.setDebounceTime(50);
     delay.delay(2000);
     lcd.clear();
 };
 
 void App::loop()
 {
+    button.loop(); // MUST call the loop() function first
+
     if (s_m_sensor.isCalibrated())
     {
         if(s_m_sensor.readPercent() < 20)

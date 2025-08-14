@@ -8,6 +8,7 @@
 #include "mocks/mock_delay.h"
 #include "mocks/mock_soil_moisture_sensor.h"
 #include "mocks/mock_pump.h"
+#include "mocks/mock_button.h"
 
 using ::testing::Return;
 
@@ -24,6 +25,7 @@ protected:
         EXPECT_CALL(lcd, setCursor);
         EXPECT_CALL(delay, delay);
         EXPECT_CALL(lcd, clear);
+        EXPECT_CALL(button, setDebounceTime);
         app.setup();
     }
 
@@ -36,6 +38,7 @@ protected:
     MockDelay delay;
     MockSoilMoistureSensor s_m_sensor;
     MockPump pump;
+    MockButton button;
     App app;
 
     ApplicationSimpleWateringFixture() : app(
@@ -44,6 +47,7 @@ protected:
         , delay
         , s_m_sensor
         , pump
+        , button
     ) {};
 };
 
@@ -70,5 +74,11 @@ TEST_F(ApplicationSimpleWateringFixture, DoNotWaterIfSensorNotCalibrated)
 {
     EXPECT_CALL(s_m_sensor, isCalibrated).WillOnce(Return(false));
     EXPECT_CALL(s_m_sensor, readPercent).Times(0);
+    app.loop();
+}
+
+TEST_F(ApplicationSimpleWateringFixture, LoopButton)
+{
+    EXPECT_CALL(button, loop);
     app.loop();
 }
