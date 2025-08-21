@@ -41,3 +41,9 @@ TEST_F(SoilMoistureSensor_Initialized_UT, ReadCalibrationStatus_true)
     s_m_sensor.calibrate();
     EXPECT_EQ(s_m_sensor.isCalibrated(), true);
 }
+
+TEST_F(SoilMoistureSensor_Initialized_UT, ReadRawSimple)
+{
+    EXPECT_CALL(analogInput, read).WillOnce(Return(205));
+    EXPECT_EQ(s_m_sensor.readRaw(), 205);
+}

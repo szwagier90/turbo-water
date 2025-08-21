@@ -103,6 +103,7 @@ protected:
 
 TEST_F(AppBasicSetupFixture, DontReadSensorIfNotCalibrated)
 {
+    EXPECT_CALL(button, isPressed).WillOnce(Return(false));
     EXPECT_CALL(gpio, analogRead).Times(0);
     EXPECT_CALL(gpio, digitalWrite).Times(0);
     app.loop();
@@ -119,5 +120,13 @@ TEST_F(AppBasicSetupFixture, ReadSensorIfCalibrated)
 TEST_F(AppBasicSetupFixture, ButtonLoopAtTheBeginning)
 {
     EXPECT_CALL(button, loop);
+    app.loop();
+}
+
+TEST_F(AppBasicSetupFixture, CalibrateSensorUsingButton)
+{
+    EXPECT_CALL(button, loop);
+    EXPECT_CALL(button, isPressed).WillOnce(Return(true));
+    EXPECT_CALL(gpio, analogRead).WillOnce(Return(100));
     app.loop();
 }

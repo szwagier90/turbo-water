@@ -82,3 +82,11 @@ TEST_F(ApplicationSimpleWateringFixture, LoopButton)
     EXPECT_CALL(button, loop);
     app.loop();
 }
+
+TEST_F(ApplicationSimpleWateringFixture, CanReadRawSensorValue)
+{
+    EXPECT_CALL(button, loop);
+    EXPECT_CALL(button, isPressed).WillOnce(Return(true));
+    EXPECT_CALL(s_m_sensor, readRaw);
+    app.loop();
+}

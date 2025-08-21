@@ -36,6 +36,9 @@ void App::loop()
 {
     button.loop(); // MUST call the loop() function first
 
+    if(button.isPressed())
+        s_m_sensor.readRaw();
+
     if (s_m_sensor.isCalibrated())
     {
         if(s_m_sensor.readPercent() < 20)

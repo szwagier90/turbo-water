@@ -19,6 +19,7 @@ public:
     virtual void calibrate() override;
 
     virtual int readPercent() const override;
+    virtual int readRaw() const override;
 
 private:
     IAnalogInput& analogInput;

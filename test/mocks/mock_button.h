@@ -8,6 +8,7 @@ class MockButton : public IButton
 public:
     MOCK_METHOD(void, setDebounceTime, (unsigned long), (override));
     MOCK_METHOD(void, loop, (), (override));
+    MOCK_METHOD(bool, isPressed, (), (override));
 };
 
 #endif // MOCK_BUTTON_H

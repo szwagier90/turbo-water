@@ -20,5 +20,10 @@ void SoilMoistureSensor::calibrate()
 
 int SoilMoistureSensor::readPercent() const
 {
-	return (analogInput.read() * 100) / 1023;
+    return (analogInput.read() * 100) / 1023;
+}
+
+int SoilMoistureSensor::readRaw() const
+{
+    return analogInput.read();
 }
