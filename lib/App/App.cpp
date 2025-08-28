@@ -36,7 +36,8 @@ void App::loop()
 {
     button.loop(); // MUST call the loop() function first
 
-    button.isShortPressed();
+    if(button.isShortPressed())
+        s_m_sensor.readRaw();
 
     if (s_m_sensor.isCalibrated())
     {

@@ -9,6 +9,7 @@ public:
     MOCK_METHOD(bool, isCalibrated, (), (const override));
     MOCK_METHOD(void, calibrate, (), (override));
     MOCK_METHOD(int, readPercent, (), (const override));
+    MOCK_METHOD(int, readRaw, (), (const override));
 };
 
 #endif // MOCK_SOIL_MOISTURE_SENSOR_H

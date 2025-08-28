@@ -120,3 +120,11 @@ TEST_F(AppBasicSetupFixture, CanDetectButtonShortPress)
     EXPECT_CALL(button, isShortPressed);
     app.loop();
 }
+
+TEST_F(AppBasicSetupFixture, ReadSMSensorValueWhenButtonShortPressed)
+{
+    EXPECT_CALL(button, loop);
+    EXPECT_CALL(button, isShortPressed).WillOnce(Return(true));
+    EXPECT_CALL(gpio, analogRead).Times(1);
+    app.loop();
+}
