@@ -15,3 +15,8 @@ void ButtonController::loop()
 {
     button.loop();
 }
+
+bool ButtonController::isShortPressed() const
+{
+    return false;
+}

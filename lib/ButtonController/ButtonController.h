@@ -12,6 +12,7 @@ public:
 
     void setDebounceTime(unsigned long) override;
     void loop() override;
+    bool isShortPressed() const override;
 
 private:
     IButton& button;

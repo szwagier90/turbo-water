@@ -113,3 +113,10 @@ TEST_F(AppBasicSetupFixture, ButtonLoopAtTheBeginning)
     EXPECT_CALL(button, loop);
     app.loop();
 }
+
+TEST_F(AppBasicSetupFixture, CanDetectButtonShortPress)
+{
+    EXPECT_CALL(button, loop);
+    EXPECT_CALL(button, isShortPressed);
+    app.loop();
+}
