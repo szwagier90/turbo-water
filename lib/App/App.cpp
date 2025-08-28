@@ -36,6 +36,8 @@ void App::loop()
 {
     button.loop(); // MUST call the loop() function first
 
+    button.isShortPressed();
+
     if (s_m_sensor.isCalibrated())
     {
         if(s_m_sensor.readPercent() < 20)
