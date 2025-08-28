@@ -6,7 +6,7 @@ App::App(
     , IDelay& delay
     , ISoilMoistureSensor& s_m_sensor
     , IPump& pump
-    , IButton& button
+    , IButtonController& button
 ) :
     serial(serial)
     , lcd(lcd)

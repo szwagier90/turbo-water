@@ -7,7 +7,7 @@
 #include <Pump.h>
 #include <SoilMoistureSensor.h>
 
-#include "mocks/mock_button.h"
+#include "mocks/mock_button_controller.h"
 #include "mocks/mock_serial.h"
 #include "mocks/mock_lcd.h"
 #include "mocks/mock_delay.h"
@@ -33,7 +33,7 @@ TEST(AppTest, PeripherialsInitialization)
     SoilMoistureSensor s_m_sensor(analogInput);
     EXPECT_CALL(pumpGpio, pinMode);
     Pump pump(pumpGpio, pumpGpioPin);
-    MockButton button;
+    MockButtonController button;
     App app(
         serial
         , lcd
@@ -76,7 +76,7 @@ protected:
     AnalogInput analogInput;
     SoilMoistureSensor s_m_sensor;
     Pump pump;
-    MockButton button;
+    MockButtonController button;
     App app;
 
     AppBasicSetupFixture() :

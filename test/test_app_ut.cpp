@@ -8,7 +8,7 @@
 #include "mocks/mock_delay.h"
 #include "mocks/mock_soil_moisture_sensor.h"
 #include "mocks/mock_pump.h"
-#include "mocks/mock_button.h"
+#include "mocks/mock_button_controller.h"
 
 using ::testing::Return;
 
@@ -19,7 +19,7 @@ TEST(Initialization, BasicInit)
     MockDelay delay;
     MockSoilMoistureSensor s_m_sensor;
     MockPump pump;
-    MockButton button;
+    MockButtonController button;
     App app(
         serial
         , lcd
@@ -58,7 +58,7 @@ protected:
     MockDelay delay;
     MockSoilMoistureSensor s_m_sensor;
     MockPump pump;
-    MockButton button;
+    MockButtonController button;
     App app;
 
     ApplicationSimpleWateringFixture() : app(
