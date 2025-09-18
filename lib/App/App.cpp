@@ -46,4 +46,5 @@ void App::loop()
         else
             pump.off();
     }
+    s_m_sensor.calibrate();
 }

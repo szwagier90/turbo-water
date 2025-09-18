@@ -128,3 +128,13 @@ TEST_F(AppBasicSetupFixture, ReadSMSensorValueWhenButtonShortPressed)
     EXPECT_CALL(gpio, analogRead).Times(1);
     app.loop();
 }
+
+TEST_F(AppBasicSetupFixture, ReadTwoRawValuesForSensorCalibration)
+{
+    EXPECT_CALL(button, isShortPressed).WillOnce(Return(true));
+    app.loop();
+    EXPECT_CALL(button, isShortPressed).WillOnce(Return(true));
+    app.loop();
+
+    EXPECT_TRUE(s_m_sensor.isCalibrated());
+}
