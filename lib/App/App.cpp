@@ -37,7 +37,10 @@ void App::loop()
     button.loop(); // MUST call the loop() function first
 
     if(button.isShortPressed())
+    {
         s_m_sensor.readRaw();
+        sensorReadCounter++;
+    }
 
     if (s_m_sensor.isCalibrated())
     {
@@ -46,5 +49,9 @@ void App::loop()
         else
             pump.off();
     }
-    s_m_sensor.calibrate();
+
+    if(2 == sensorReadCounter)
+    {
+        s_m_sensor.calibrate();
+    }
 }

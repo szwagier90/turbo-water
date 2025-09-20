@@ -138,3 +138,11 @@ TEST_F(AppBasicSetupFixture, ReadTwoRawValuesForSensorCalibration)
 
     EXPECT_TRUE(s_m_sensor.isCalibrated());
 }
+
+TEST_F(AppBasicSetupFixture, DoNotCalibrateWithJustOneValue)
+{
+    EXPECT_CALL(button, isShortPressed).WillOnce(Return(true));
+    app.loop();
+
+    EXPECT_FALSE(s_m_sensor.isCalibrated());
+}

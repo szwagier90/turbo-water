@@ -29,6 +29,8 @@ private:
     ISoilMoistureSensor& s_m_sensor;
     IPump& pump;
     IButtonController& button;
+
+    short sensorReadCounter = 0;
 };
 
 #endif // APP_H
