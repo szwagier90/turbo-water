@@ -121,12 +121,13 @@ TEST_F(AppBasicSetupFixture, CanDetectButtonShortPress)
     app.loop();
 }
 
-TEST_F(AppBasicSetupFixture, ReadSMSensorValueWhenButtonShortPressed)
+TEST_F(AppBasicSetupFixture, ReadSMSensorValueWhenButtonShortPressedButNotCalibrate)
 {
     EXPECT_CALL(button, loop);
     EXPECT_CALL(button, isShortPressed).WillOnce(Return(true));
     EXPECT_CALL(gpio, analogRead).Times(1);
     app.loop();
+    EXPECT_FALSE(s_m_sensor.isCalibrated());
 }
 
 TEST_F(AppBasicSetupFixture, ReadTwoRawValuesForSensorCalibration)
@@ -137,12 +138,4 @@ TEST_F(AppBasicSetupFixture, ReadTwoRawValuesForSensorCalibration)
     app.loop();
 
     EXPECT_TRUE(s_m_sensor.isCalibrated());
-}
-
-TEST_F(AppBasicSetupFixture, DoNotCalibrateWithJustOneValue)
-{
-    EXPECT_CALL(button, isShortPressed).WillOnce(Return(true));
-    app.loop();
-
-    EXPECT_FALSE(s_m_sensor.isCalibrated());
 }
