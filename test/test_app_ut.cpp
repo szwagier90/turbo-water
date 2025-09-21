@@ -121,3 +121,17 @@ TEST_F(ApplicationSimpleWateringFixture, ReadTwoRawValuesForSensorCalibration)
     EXPECT_CALL(s_m_sensor, calibrate).Times(1);
     app.loop();
 }
+
+TEST_F(ApplicationSimpleWateringFixture, DoNotCalibrateAgainIfAlreadyCalibrated)
+{
+    EXPECT_CALL(button, isShortPressed).WillOnce(Return(true));
+    app.loop();
+
+    EXPECT_CALL(button, isShortPressed).WillOnce(Return(true));
+    EXPECT_CALL(s_m_sensor, calibrate).Times(1);
+    app.loop();
+
+    EXPECT_CALL(s_m_sensor, isCalibrated).WillOnce(Return(true));
+    EXPECT_CALL(button, isShortPressed).WillOnce(Return(false));
+    app.loop();
+}

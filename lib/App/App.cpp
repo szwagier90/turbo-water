@@ -49,9 +49,11 @@ void App::loop()
         else
             pump.off();
     }
-
-    if(2 == sensorReadCounter)
+    else
     {
-        s_m_sensor.calibrate();
+        if(2 == sensorReadCounter)
+        {
+            s_m_sensor.calibrate();
+        }
     }
 }
