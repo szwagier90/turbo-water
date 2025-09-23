@@ -16,7 +16,7 @@ public:
 
     virtual bool isCalibrated() const override;
 
-    virtual void calibrate() override;
+    virtual void calibrate(int dry, int wet) override;
 
     virtual int readPercent() const override;
     virtual int readRaw() const override;
@@ -25,6 +25,8 @@ private:
     IAnalogInput& analogInput;
 
     bool calibrated;
+    int dry;
+    int wet;
 };
 
 #endif // SOIL_MOISTURE_SENSOR_H

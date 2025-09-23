@@ -34,11 +34,19 @@ void App::setup() {
 
 void App::loop()
 {
+    int sensorValue;
+
     button.loop(); // MUST call the loop() function first
 
     if(button.isShortPressed())
     {
-        s_m_sensor.readRaw();
+        sensorValue = s_m_sensor.readRaw();
+
+        if(0 == sensorReadCounter)
+            dry = sensorValue;
+        else if(1 == sensorReadCounter)
+            wet = sensorValue;
+
         sensorReadCounter++;
     }
 
@@ -52,8 +60,6 @@ void App::loop()
     else
     {
         if(2 == sensorReadCounter)
-        {
-            s_m_sensor.calibrate();
-        }
+            s_m_sensor.calibrate(dry, wet);
     }
 }

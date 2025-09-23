@@ -31,6 +31,9 @@ private:
     IButtonController& button;
 
     short sensorReadCounter = 0;
+    int dry;
+    int wet;
+
 };
 
 #endif // APP_H

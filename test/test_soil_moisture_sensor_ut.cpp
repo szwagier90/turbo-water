@@ -27,6 +27,7 @@ protected:
 
 TEST_F(SoilMoistureSensor_Initialized_UT, ReadPercentSimple)
 {
+    s_m_sensor.calibrate(1, 1000);
     EXPECT_CALL(analogInput, read).WillOnce(Return(205));
     EXPECT_EQ(s_m_sensor.readPercent(), 20);
 }
@@ -38,7 +39,7 @@ TEST_F(SoilMoistureSensor_Initialized_UT, ReadCalibrationStatus_false)
 
 TEST_F(SoilMoistureSensor_Initialized_UT, ReadCalibrationStatus_true)
 {
-    s_m_sensor.calibrate();
+    s_m_sensor.calibrate(1, 2);
     EXPECT_EQ(s_m_sensor.isCalibrated(), true);
 }
 
@@ -46,4 +47,11 @@ TEST_F(SoilMoistureSensor_Initialized_UT, ReadRawSimple)
 {
     EXPECT_CALL(analogInput, read).WillOnce(Return(205));
     EXPECT_EQ(s_m_sensor.readRaw(), 205);
+}
+
+TEST_F(SoilMoistureSensor_Initialized_UT, ReadCorrectPercent)
+{
+    s_m_sensor.calibrate(1, 100);
+    EXPECT_CALL(analogInput, read).WillOnce(Return(90));
+    EXPECT_GE(s_m_sensor.readPercent(), 80);
 }
