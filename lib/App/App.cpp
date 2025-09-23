@@ -45,7 +45,10 @@ void App::loop()
         if(0 == sensorReadCounter)
             dry = sensorValue;
         else if(1 == sensorReadCounter)
+        {
             wet = sensorValue;
+            s_m_sensor.calibrate(dry, wet);
+        }
 
         sensorReadCounter++;
     }
@@ -56,10 +59,5 @@ void App::loop()
             pump.on();
         else
             pump.off();
-    }
-    else
-    {
-        if(2 == sensorReadCounter)
-            s_m_sensor.calibrate(dry, wet);
     }
 }

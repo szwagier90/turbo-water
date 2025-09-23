@@ -130,25 +130,18 @@ TEST_F(AppBasicSetupFixture, ReadSMSensorValueWhenButtonShortPressedButNotCalibr
     EXPECT_FALSE(s_m_sensor.isCalibrated());
 }
 
-TEST_F(AppBasicSetupFixture, ReadTwoRawValuesForSensorCalibration)
-{
-    EXPECT_CALL(button, isShortPressed).WillOnce(Return(true));
-    app.loop();
-    EXPECT_CALL(button, isShortPressed).WillOnce(Return(true));
-    app.loop();
-
-    EXPECT_TRUE(s_m_sensor.isCalibrated());
-}
-
 TEST_F(AppBasicSetupFixture, CalculateCorrectSensorPercentValue)
 {
     EXPECT_CALL(button, isShortPressed).WillOnce(Return(true));
     EXPECT_CALL(sensorGpio, analogRead).WillOnce(Return(1));
     app.loop();
     EXPECT_CALL(button, isShortPressed).WillOnce(Return(true));
-    EXPECT_CALL(sensorGpio, analogRead).WillOnce(Return(100));
+    EXPECT_CALL(sensorGpio, analogRead)
+        .WillOnce(Return(100))
+        .WillOnce(Return(90));
     app.loop();
 
     EXPECT_CALL(sensorGpio, analogRead).WillOnce(Return(90));
     EXPECT_GE(s_m_sensor.readPercent(), 80);
+    EXPECT_TRUE(s_m_sensor.isCalibrated());
 }
