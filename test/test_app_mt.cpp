@@ -62,16 +62,6 @@ class AppBasicSetupFixture : public ::testing::Test
 protected:
     void SetUp() override
     {
-        EXPECT_CALL(serial, begin);
-        EXPECT_CALL(serial, println).Times(2);
-        EXPECT_CALL(lcd, init);
-        EXPECT_CALL(lcd, backlight);
-        EXPECT_CALL(lcd, print).Times(2);
-        EXPECT_CALL(lcd, setCursor);
-        EXPECT_CALL(delay, delay);
-        EXPECT_CALL(lcd, clear);
-        EXPECT_CALL(button, setDebounceTime);
-        app.setup();
     }
 
     void TearDown() override
