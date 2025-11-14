@@ -7,7 +7,7 @@
 #include <Pump.h>
 #include <SoilMoistureSensor.h>
 
-#include "mocks/mock_button.h"
+#include "mocks/mock_button_controller.h"
 #include "mocks/mock_serial.h"
 #include "mocks/mock_lcd.h"
 #include "mocks/mock_delay.h"
@@ -33,7 +33,7 @@ TEST(AppTest, PeripherialsInitialization)
     SoilMoistureSensor s_m_sensor(analogInput);
     EXPECT_CALL(pumpGpio, pinMode);
     Pump pump(pumpGpio, pumpGpioPin);
-    MockButton button;
+    MockButtonController button;
     App app(
         serial
         , lcd
@@ -76,7 +76,7 @@ protected:
     AnalogInput analogInput;
     SoilMoistureSensor s_m_sensor;
     Pump pump;
-    MockButton button;
+    MockButtonController button;
     App app;
 
     AppBasicSetupFixture() :
@@ -102,7 +102,7 @@ TEST_F(AppBasicSetupFixture, DontReadSensorIfNotCalibrated)
 
 TEST_F(AppBasicSetupFixture, ReadSensorIfCalibrated)
 {
-    s_m_sensor.calibrate();
+    s_m_sensor.calibrate(1, 2);
     EXPECT_CALL(sensorGpio, analogRead).Times(1);
     EXPECT_CALL(pumpGpio, digitalWrite).Times(1);
     app.loop();
@@ -112,4 +112,36 @@ TEST_F(AppBasicSetupFixture, ButtonLoopAtTheBeginning)
 {
     EXPECT_CALL(button, loop);
     app.loop();
+}
+
+TEST_F(AppBasicSetupFixture, CanDetectButtonShortPress)
+{
+    EXPECT_CALL(button, loop);
+    EXPECT_CALL(button, isShortPressed);
+    app.loop();
+}
+
+TEST_F(AppBasicSetupFixture, ReadSMSensorValueWhenButtonShortPressedButNotCalibrate)
+{
+    EXPECT_CALL(button, loop);
+    EXPECT_CALL(button, isShortPressed).WillOnce(Return(true));
+    EXPECT_CALL(sensorGpio, analogRead).Times(1);
+    app.loop();
+    EXPECT_FALSE(s_m_sensor.isCalibrated());
+}
+
+TEST_F(AppBasicSetupFixture, CalculateCorrectSensorPercentValue)
+{
+    EXPECT_CALL(button, isShortPressed).WillOnce(Return(true));
+    EXPECT_CALL(sensorGpio, analogRead).WillOnce(Return(1));
+    app.loop();
+    EXPECT_CALL(button, isShortPressed).WillOnce(Return(true));
+    EXPECT_CALL(sensorGpio, analogRead)
+        .WillOnce(Return(100))
+        .WillOnce(Return(90));
+    app.loop();
+
+    EXPECT_CALL(sensorGpio, analogRead).WillOnce(Return(90));
+    EXPECT_GE(s_m_sensor.readPercent(), 80);
+    EXPECT_TRUE(s_m_sensor.isCalibrated());
 }

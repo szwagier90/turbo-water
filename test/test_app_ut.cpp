@@ -8,7 +8,7 @@
 #include "mocks/mock_delay.h"
 #include "mocks/mock_soil_moisture_sensor.h"
 #include "mocks/mock_pump.h"
-#include "mocks/mock_button.h"
+#include "mocks/mock_button_controller.h"
 
 using ::testing::Return;
 
@@ -19,7 +19,7 @@ TEST(Initialization, BasicInit)
     MockDelay delay;
     MockSoilMoistureSensor s_m_sensor;
     MockPump pump;
-    MockButton button;
+    MockButtonController button;
     App app(
         serial
         , lcd
@@ -58,7 +58,7 @@ protected:
     MockDelay delay;
     MockSoilMoistureSensor s_m_sensor;
     MockPump pump;
-    MockButton button;
+    MockButtonController button;
     App app;
 
     ApplicationSimpleWateringFixture() : app(
@@ -100,5 +100,50 @@ TEST_F(ApplicationSimpleWateringFixture, DoNotWaterIfSensorNotCalibrated)
 TEST_F(ApplicationSimpleWateringFixture, LoopButton)
 {
     EXPECT_CALL(button, loop);
+    app.loop();
+}
+
+TEST_F(ApplicationSimpleWateringFixture, CanReadRawSensorValue)
+{
+    EXPECT_CALL(button, loop);
+    EXPECT_CALL(button, isShortPressed).WillOnce(Return(true));
+    EXPECT_CALL(s_m_sensor, readRaw);
+    EXPECT_CALL(s_m_sensor, calibrate).Times(0);
+    app.loop();
+}
+
+TEST_F(ApplicationSimpleWateringFixture, ReadTwoRawValuesForSensorCalibration)
+{
+    EXPECT_CALL(button, isShortPressed).WillOnce(Return(true));
+    app.loop();
+
+    EXPECT_CALL(button, isShortPressed).WillOnce(Return(true));
+    EXPECT_CALL(s_m_sensor, calibrate).Times(1);
+    app.loop();
+}
+
+TEST_F(ApplicationSimpleWateringFixture, DoNotCalibrateAgainIfAlreadyCalibrated)
+{
+    EXPECT_CALL(button, isShortPressed).WillOnce(Return(true));
+    app.loop();
+
+    EXPECT_CALL(button, isShortPressed).WillOnce(Return(true));
+    EXPECT_CALL(s_m_sensor, calibrate).Times(1);
+    app.loop();
+
+    EXPECT_CALL(s_m_sensor, isCalibrated).WillOnce(Return(true));
+    EXPECT_CALL(button, isShortPressed).WillOnce(Return(false));
+    app.loop();
+}
+
+TEST_F(ApplicationSimpleWateringFixture, CalibrateSMSensorWithParticularValues)
+{
+    EXPECT_CALL(button, isShortPressed).WillOnce(Return(true));
+    EXPECT_CALL(s_m_sensor, readRaw).WillOnce(Return(1));
+    app.loop();
+
+    EXPECT_CALL(button, isShortPressed).WillOnce(Return(true));
+    EXPECT_CALL(s_m_sensor, readRaw).WillOnce(Return(100));
+    EXPECT_CALL(s_m_sensor, calibrate(1, 100)).Times(1);
     app.loop();
 }

@@ -6,7 +6,7 @@ App::App(
     , IDelay& delay
     , ISoilMoistureSensor& s_m_sensor
     , IPump& pump
-    , IButton& button
+    , IButtonController& button
 ) :
     serial(serial)
     , lcd(lcd)
@@ -34,7 +34,24 @@ void App::setup() {
 
 void App::loop()
 {
+    int sensorValue;
+
     button.loop(); // MUST call the loop() function first
+
+    if(button.isShortPressed())
+    {
+        sensorValue = s_m_sensor.readRaw();
+
+        if(0 == sensorReadCounter)
+            dry = sensorValue;
+        else if(1 == sensorReadCounter)
+        {
+            wet = sensorValue;
+            s_m_sensor.calibrate(dry, wet);
+        }
+
+        sensorReadCounter++;
+    }
 
     if (s_m_sensor.isCalibrated())
     {
