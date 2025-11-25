@@ -4,6 +4,7 @@ App::App(
     ISerial& serial
     , ILcd& lcd
     , IDelay& delay
+    , IMockTimeProvider& timeProvider
     , ISoilMoistureSensor& s_m_sensor
     , IPump& pump
     , IButtonController& button
@@ -11,6 +12,7 @@ App::App(
     serial(serial)
     , lcd(lcd)
     , delay(delay)
+    , timeProvider(timeProvider)
     , s_m_sensor(s_m_sensor)
     , pump(pump)
     , button(button)
@@ -37,6 +39,18 @@ void App::loop()
     int sensorValue;
 
     button.loop(); // MUST call the loop() function first
+
+    if(button.isPressed())
+    {
+        timeProvider.millis();
+        pump.on();
+    }
+
+    if(button.isReleased())
+    {
+        timeProvider.millis();
+        pump.off();
+    }
 
     if(button.isShortPressed())
     {

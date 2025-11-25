@@ -4,6 +4,7 @@
 #include "ISerial.h"
 #include "ILcd.h"
 #include "IDelay.h"
+#include "IMockTimeProvider.h"
 #include "ISoilMoistureSensor.h"
 #include "IPump.h"
 #include "IButtonController.h"
@@ -15,6 +16,7 @@ public:
         ISerial& serial
         , ILcd& lcd
         , IDelay& delay
+        , IMockTimeProvider& timeProvider
         , ISoilMoistureSensor& s_m_sensor
         , IPump& pump
         , IButtonController& button
@@ -26,6 +28,7 @@ private:
     ISerial& serial;
     ILcd& lcd;
     IDelay& delay;
+    IMockTimeProvider& timeProvider;
     ISoilMoistureSensor& s_m_sensor;
     IPump& pump;
     IButtonController& button;
@@ -33,7 +36,6 @@ private:
     short sensorReadCounter = 0;
     int dry;
     int wet;
-
 };
 
 #endif // APP_H

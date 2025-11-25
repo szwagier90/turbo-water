@@ -6,6 +6,7 @@
 #include "mocks/mock_serial.h"
 #include "mocks/mock_lcd.h"
 #include "mocks/mock_delay.h"
+#include "mocks/mock_time_provider.h"
 #include "mocks/mock_soil_moisture_sensor.h"
 #include "mocks/mock_pump.h"
 #include "mocks/mock_button_controller.h"
@@ -17,6 +18,7 @@ TEST(Initialization, BasicInit)
     MockSerial serial;
     MockLcd lcd;
     MockDelay delay;
+    MockTimeProvider timeProvider;
     MockSoilMoistureSensor s_m_sensor;
     MockPump pump;
     MockButtonController button;
@@ -24,6 +26,7 @@ TEST(Initialization, BasicInit)
         serial
         , lcd
         , delay
+        , timeProvider
         , s_m_sensor
         , pump
         , button
@@ -56,6 +59,7 @@ protected:
     MockSerial serial;
     MockLcd lcd;
     MockDelay delay;
+    MockTimeProvider timeProvider;
     MockSoilMoistureSensor s_m_sensor;
     MockPump pump;
     MockButtonController button;
@@ -65,6 +69,7 @@ protected:
         serial
         , lcd
         , delay
+        , timeProvider
         , s_m_sensor
         , pump
         , button
