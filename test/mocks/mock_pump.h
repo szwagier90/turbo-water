@@ -6,6 +6,8 @@
 class MockPump : public IPump
 {
 public:
+    MOCK_METHOD(bool, isCalibrated, (), (const, override));
+
     MOCK_METHOD(void, on, (), (override));
     MOCK_METHOD(void, off, (), (override));
 };

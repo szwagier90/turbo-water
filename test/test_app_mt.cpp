@@ -104,7 +104,7 @@ TEST_F(AppBasicSetupFixture, ReadSensorIfCalibrated)
 {
     s_m_sensor.calibrate(1, 2);
     EXPECT_CALL(sensorGpio, analogRead).Times(1);
-    EXPECT_CALL(pumpGpio, digitalWrite).Times(1);
+    EXPECT_CALL(pumpGpio, digitalWrite).Times(0);
     app.loop();
 }
 

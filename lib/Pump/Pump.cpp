@@ -10,6 +10,11 @@ Pump::Pump(
     gpio.pinMode(pin, PinMode::Output);
 }
 
+bool Pump::isCalibrated() const
+{
+    return false;
+}
+
 void Pump::on()
 {
     gpio.digitalWrite(pin, PinOutput::High);
