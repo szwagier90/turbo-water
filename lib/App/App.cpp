@@ -42,13 +42,13 @@ void App::loop()
 
     if(button.isPressed())
     {
-        timeProvider.millis();
+        startMs = timeProvider.millis();
         pump.on();
     }
 
     if(button.isReleased())
     {
-        timeProvider.millis();
+        duration1 = timeProvider.millis() - startMs;
         pump.off();
     }
 

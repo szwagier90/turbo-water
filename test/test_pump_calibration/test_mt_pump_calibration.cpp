@@ -60,7 +60,7 @@ protected:
         ) {};
 };
 
-TEST_F(AppPumpCalibrationFixture, FirstButtonPressRun)
+TEST_F(AppPumpCalibrationFixture, FirstButtonPressRunSavesFirstDuration)
 {
     EXPECT_CALL(button, loop());
     EXPECT_CALL(button, isPressed()).WillOnce(Return(true));
@@ -77,4 +77,6 @@ TEST_F(AppPumpCalibrationFixture, FirstButtonPressRun)
     EXPECT_CALL(pumpGpio, digitalWrite(pumpGpioPin, PinOutput::Low));
 
     app.loop();
+
+    EXPECT_EQ(app.duration1, 1000);
 }

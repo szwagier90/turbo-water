@@ -24,6 +24,9 @@ public:
     void setup();
     void loop();
 
+    uint32_t startMs = 0;
+    uint32_t duration1 = 0;
+
 private:
     ISerial& serial;
     ILcd& lcd;
