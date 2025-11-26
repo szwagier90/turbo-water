@@ -24,8 +24,22 @@ public:
     void setup();
     void loop();
 
+    float getPumpFlowA();
+    float getPumpFlowB();
+
+    void calculatePumpCalibration();
+
+    const float vol1 = 200;
+    const float vol2 = 500;
+
+    uint8_t runIndex = 0;
+
     uint32_t startMs = 0;
     uint32_t duration1 = 0;
+    uint32_t duration2 = 0;
+
+    float pumpFlowA = 0.0f;
+    float pumpFlowB = 0.0f;
 
 private:
     ISerial& serial;

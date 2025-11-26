@@ -24,6 +24,8 @@ const int buttonGpioPin = 0;
 
 const uint32_t firstPressTime = 2000;
 const uint32_t firstReleaseTime = 3000;
+const uint32_t secondPressTime = 5000;
+const uint32_t secondReleaseTime = 10000;
 
 class AppPumpCalibrationFixture : public ::testing::Test
 {
@@ -91,4 +93,34 @@ TEST_F(AppPumpCalibrationFixture, FirstButtonPressRunSavesFirstDuration)
     app.loop();
 
     EXPECT_EQ(app.duration1, firstReleaseTime - firstPressTime);
+}
+
+TEST_F(AppPumpCalibrationFixture, TwoButtonPressesRunSavesTwoDurations)
+{
+    EXPECT_CALL(button, loop());
+    EXPECT_CALL(pumpGpio, digitalWrite(pumpGpioPin, PinOutput::High));
+    expectButtonPressTime(firstPressTime);
+    app.loop();
+
+    EXPECT_CALL(button, loop());
+    expectButtonReleaseTime(firstReleaseTime);
+    EXPECT_CALL(pumpGpio, digitalWrite(pumpGpioPin, PinOutput::Low));
+
+    app.loop();
+
+    EXPECT_CALL(button, loop());
+    EXPECT_CALL(pumpGpio, digitalWrite(pumpGpioPin, PinOutput::High));
+    expectButtonPressTime(secondPressTime);
+    app.loop();
+
+    EXPECT_CALL(button, loop());
+    expectButtonReleaseTime(secondReleaseTime);
+    EXPECT_CALL(pumpGpio, digitalWrite(pumpGpioPin, PinOutput::Low));
+
+    app.loop();
+
+    EXPECT_EQ(app.duration1, firstReleaseTime - firstPressTime);
+    EXPECT_EQ(app.duration2, secondReleaseTime - secondPressTime);
+    EXPECT_NEAR(app.getPumpFlowA(), 0.075f, 1e-5f);
+    EXPECT_NEAR(app.getPumpFlowB(), 125.0f, 1e-5f);
 }

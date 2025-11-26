@@ -48,8 +48,18 @@ void App::loop()
 
     if(button.isReleased())
     {
-        duration1 = timeProvider.millis() - startMs;
+        if(0 == runIndex)
+        {
+            duration1 = timeProvider.millis() - startMs;
+        }
+        else if(1 == runIndex)
+        {
+            duration2 = timeProvider.millis() - startMs;
+            calculatePumpCalibration();
+        }
+
         pump.off();
+        ++runIndex;
     }
 
     if(button.isShortPressed())
@@ -84,4 +94,20 @@ void App::loop()
             }
         }
     }
+}
+
+float App::getPumpFlowA()
+{
+    return (float)pumpFlowA;
+}
+
+float App::getPumpFlowB()
+{
+    return pumpFlowB;
+}
+
+void App::calculatePumpCalibration()
+{
+    pumpFlowA = (vol2-vol1)/(duration2-duration1);
+    pumpFlowB = vol2-(pumpFlowA*duration2);
 }
