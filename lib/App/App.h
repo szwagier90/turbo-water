@@ -27,7 +27,7 @@ public:
     float getPumpFlowA();
     float getPumpFlowB();
 
-    void calculatePumpCalibration();
+    void setPumpFlowAB(float a, float b);
 
     const float vol1 = 200;
     const float vol2 = 500;
@@ -42,6 +42,8 @@ public:
     float pumpFlowB = 0.0f;
 
 private:
+    void calculatePumpCalibration();
+
     ISerial& serial;
     ILcd& lcd;
     IDelay& delay;

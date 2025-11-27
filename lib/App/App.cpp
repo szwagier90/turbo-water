@@ -108,6 +108,14 @@ float App::getPumpFlowB()
 
 void App::calculatePumpCalibration()
 {
-    pumpFlowA = (vol2-vol1)/(duration2-duration1);
-    pumpFlowB = vol2-(pumpFlowA*duration2);
+    const float a = (vol2-vol1)/(duration2-duration1);
+    const float b = vol2-(a*duration2);
+
+    setPumpFlowAB(a, b);
+}
+
+void App::setPumpFlowAB(float a, float b)
+{
+    pumpFlowA = a;
+    pumpFlowB = b;
 }
