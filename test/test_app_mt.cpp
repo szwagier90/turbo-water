@@ -151,3 +151,23 @@ TEST_F(AppBasicSetupFixture, CalculateCorrectSensorPercentValue)
     EXPECT_GE(s_m_sensor.readPercent(), 80);
     EXPECT_TRUE(s_m_sensor.isCalibrated());
 }
+
+TEST_F(AppBasicSetupFixture, CalculateCorrectSensorPerenctValue2)
+{
+    s_m_sensor.calibrate(1, 2);
+
+
+
+    // EXPECT_CALL(button, isShortPressed).WillOnce(Return(true));
+    // EXPECT_CALL(sensorGpio, analogRead).WillOnce(Return(1));
+    // app.loop();
+    // EXPECT_CALL(button, isShortPressed).WillOnce(Return(true));
+    // EXPECT_CALL(sensorGpio, analogRead)
+    //     .WillOnce(Return(100))
+    //     .WillOnce(Return(90));
+    // app.loop();
+
+    // EXPECT_CALL(sensorGpio, analogRead).WillOnce(Return(90));
+    // EXPECT_GE(s_m_sensor.readPercent(), 80);
+    // EXPECT_TRUE(s_m_sensor.isCalibrated());
+}
