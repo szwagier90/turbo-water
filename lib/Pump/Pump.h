@@ -14,6 +14,8 @@ public:
         , uint8_t pin
     );
 
+    bool isCalibrated() const override;
+
     void on() override;
     void off() override;
 

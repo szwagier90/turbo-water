@@ -96,7 +96,6 @@ protected:
 TEST_F(AppBasicSetupFixture, DontReadSensorIfNotCalibrated)
 {
     EXPECT_CALL(sensorGpio, analogRead).Times(0);
-    EXPECT_CALL(pumpGpio, digitalWrite).Times(0);
     app.loop();
 }
 
@@ -104,7 +103,6 @@ TEST_F(AppBasicSetupFixture, ReadSensorIfCalibrated)
 {
     s_m_sensor.calibrate(1, 2);
     EXPECT_CALL(sensorGpio, analogRead).Times(1);
-    EXPECT_CALL(pumpGpio, digitalWrite).Times(1);
     app.loop();
 }
 
@@ -144,4 +142,12 @@ TEST_F(AppBasicSetupFixture, CalculateCorrectSensorPercentValue)
     EXPECT_CALL(sensorGpio, analogRead).WillOnce(Return(90));
     EXPECT_GE(s_m_sensor.readPercent(), 80);
     EXPECT_TRUE(s_m_sensor.isCalibrated());
+}
+
+TEST_F(AppBasicSetupFixture, DoNotWaterIfPumpNotCalibrated)
+{
+    s_m_sensor.calibrate(1, 100);
+
+    EXPECT_CALL(pumpGpio, digitalWrite(pumpGpioPin, PinOutput::High)).Times(0);
+    app.loop();
 }
