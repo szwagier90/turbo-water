@@ -151,3 +151,47 @@ TEST_F(AppBasicSetupFixture, DoNotWaterIfPumpNotCalibrated)
     EXPECT_CALL(pumpGpio, digitalWrite(pumpGpioPin, PinOutput::High)).Times(0);
     app.loop();
 }
+
+class AppBasicSetupCalibratedFixture : public ::testing::Test
+{
+protected:
+    void SetUp() override
+    {
+        s_m_sensor.calibrate(1, 100);
+        pump.calibrate();
+    }
+
+    void TearDown() override
+    {
+    }
+
+    MockSerial serial;
+    MockLcd lcd;
+    MockDelay delay;
+    MockGpio sensorGpio;
+    MockGpio pumpGpio;
+    AnalogInput analogInput;
+    SoilMoistureSensor s_m_sensor;
+    Pump pump;
+    MockButtonController button;
+    App app;
+
+    AppBasicSetupCalibratedFixture() :
+        analogInput(sensorGpio, sensorGpioPin)
+        , s_m_sensor(analogInput)
+        , pump(pumpGpio, pumpGpioPin)
+        , app(
+            serial
+            , lcd
+            , delay
+            , s_m_sensor
+            , pump
+            , button
+        ) {};
+};
+
+TEST_F(AppBasicSetupCalibratedFixture, WaterIfPumpCalibrated)
+{
+    EXPECT_CALL(pumpGpio, digitalWrite(pumpGpioPin, PinOutput::High)).Times(1);
+    app.loop();
+}

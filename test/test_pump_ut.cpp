@@ -34,6 +34,12 @@ protected:
     Pump_Initialized_UT_Fixture() : pump(gpio, pumpGpioPin) {}
 };
 
+TEST_F(Pump_Initialized_UT_Fixture, Calibrate)
+{
+    pump.calibrate();
+    EXPECT_TRUE(pump.isCalibrated());
+}
+
 TEST_F(Pump_Initialized_UT_Fixture, TurnPumpOn)
 {
     EXPECT_CALL(gpio, digitalWrite(pumpGpioPin, PinOutput::High));

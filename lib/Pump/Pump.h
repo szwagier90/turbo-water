@@ -16,12 +16,16 @@ public:
 
     bool isCalibrated() const override;
 
+    void calibrate() override;
+
     void on() override;
     void off() override;
 
 private:
     IGpio& gpio;
     uint8_t pin;
+
+    bool calibrated;
 };
 
 #endif // PUMP_H

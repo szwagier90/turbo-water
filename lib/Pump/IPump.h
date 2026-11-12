@@ -6,6 +6,8 @@ class IPump
 public:
     virtual bool isCalibrated() const = 0;
 
+    virtual void calibrate() = 0;
+
     virtual void on() = 0;
     virtual void off() = 0;
 };

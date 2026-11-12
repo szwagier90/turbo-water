@@ -6,13 +6,19 @@ Pump::Pump(
 )
     : gpio(gpio)
     , pin(pin)
+    , calibrated(false)
 {
     gpio.pinMode(pin, PinMode::Output);
 }
 
 bool Pump::isCalibrated() const
 {
-    return false;
+    return calibrated;
+}
+
+void Pump::calibrate()
+{
+    calibrated = true;
 }
 
 void Pump::on()
