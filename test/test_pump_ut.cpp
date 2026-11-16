@@ -51,3 +51,12 @@ TEST_F(Pump_Initialized_UT_Fixture, TurnPumpOff)
     EXPECT_CALL(gpio, digitalWrite(pumpGpioPin, PinOutput::Low));
     pump.off();
 }
+
+TEST_F(Pump_Initialized_UT_Fixture, OnCalledTwiceWritesHighOnlyOnce)
+{
+    EXPECT_CALL(gpio, digitalWrite(pumpGpioPin, PinOutput::High));
+    pump.on();
+
+    pump.on();
+    pump.on();
+}

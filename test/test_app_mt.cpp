@@ -195,3 +195,12 @@ TEST_F(AppBasicSetupCalibratedFixture, WaterIfPumpCalibrated)
     EXPECT_CALL(pumpGpio, digitalWrite(pumpGpioPin, PinOutput::High)).Times(1);
     app.loop();
 }
+
+TEST_F(AppBasicSetupCalibratedFixture, TurnWateringOnOnlyOnce)
+{
+    EXPECT_CALL(pumpGpio, digitalWrite(pumpGpioPin, PinOutput::High)).Times(1);
+    app.loop();
+
+    EXPECT_CALL(pumpGpio, digitalWrite(pumpGpioPin, PinOutput::High)).Times(0);
+    app.loop();
+}

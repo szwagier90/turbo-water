@@ -7,6 +7,7 @@ Pump::Pump(
     : gpio(gpio)
     , pin(pin)
     , calibrated(false)
+    , onOffState(false)
 {
     gpio.pinMode(pin, PinMode::Output);
 }
@@ -23,7 +24,11 @@ void Pump::calibrate()
 
 void Pump::on()
 {
-    gpio.digitalWrite(pin, PinOutput::High);
+    if (onOffState == false)
+    {
+        gpio.digitalWrite(pin, PinOutput::High);
+        onOffState = true;
+    }
 }
 
 void Pump::off()

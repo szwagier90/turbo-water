@@ -26,6 +26,7 @@ private:
     uint8_t pin;
 
     bool calibrated;
+    bool onOffState;
 };
 
 #endif // PUMP_H
