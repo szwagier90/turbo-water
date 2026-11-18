@@ -4,6 +4,7 @@ App::App(
     ISerial& serial
     , ILcd& lcd
     , IDelay& delay
+    , ITimeProvider& timeProvider
     , ISoilMoistureSensor& s_m_sensor
     , IPump& pump
     , IButtonController& button
@@ -11,9 +12,11 @@ App::App(
     serial(serial)
     , lcd(lcd)
     , delay(delay)
+    , timeProvider(timeProvider)
     , s_m_sensor(s_m_sensor)
     , pump(pump)
     , button(button)
+    , wateringStatus(false)
 {}
 
 void App::setup() {
@@ -53,17 +56,28 @@ void App::loop()
         sensorReadCounter++;
     }
 
-    if (s_m_sensor.isCalibrated())
+    if (false == wateringStatus)
     {
-        if(s_m_sensor.readPercent() < 20)
+        if (s_m_sensor.isCalibrated())
         {
-            if(pump.isCalibrated())
-                pump.on();
+            if(s_m_sensor.readPercent() < 20)
+            {
+                if(pump.isCalibrated())
+                {
+                    timeProvider.millis();
+                    pump.on();
+                    wateringStatus = true;
+                }
+            }
+            else
+            {
+                if(pump.isCalibrated())
+                    pump.off();
+            }
         }
-        else
-        {
-            if(pump.isCalibrated())
-                pump.off();
-        }
+    }
+    else
+    {
+        timeProvider.millis();
     }
 }

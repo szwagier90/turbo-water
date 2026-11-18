@@ -6,6 +6,7 @@
 #include "mocks/mock_serial.h"
 #include "mocks/mock_lcd.h"
 #include "mocks/mock_delay.h"
+#include "mocks/mock_time_provider.h"
 #include "mocks/mock_soil_moisture_sensor.h"
 #include "mocks/mock_pump.h"
 #include "mocks/mock_button_controller.h"
@@ -17,6 +18,7 @@ TEST(Initialization, BasicInit)
     MockSerial serial;
     MockLcd lcd;
     MockDelay delay;
+    MockTimeProvider timeProvider;
     MockSoilMoistureSensor s_m_sensor;
     MockPump pump;
     MockButtonController button;
@@ -24,6 +26,7 @@ TEST(Initialization, BasicInit)
         serial
         , lcd
         , delay
+        , timeProvider
         , s_m_sensor
         , pump
         , button
@@ -56,6 +59,7 @@ protected:
     MockSerial serial;
     MockLcd lcd;
     MockDelay delay;
+    MockTimeProvider timeProvider;
     MockSoilMoistureSensor s_m_sensor;
     MockPump pump;
     MockButtonController button;
@@ -65,6 +69,7 @@ protected:
         serial
         , lcd
         , delay
+        , timeProvider
         , s_m_sensor
         , pump
         , button
@@ -88,18 +93,18 @@ TEST_F(ApplicationSimpleWateringFixture, DoNotTurnPumpOnWhenPumpNotCalibrated)
     app.loop();
 }
 
-TEST_F(ApplicationSimpleWateringFixture, TurnPumpOffWhenMoistureAboveThreshold)
-{
-    EXPECT_CALL(s_m_sensor, isCalibrated).WillRepeatedly(Return(true));
-    EXPECT_CALL(s_m_sensor, readPercent).WillOnce(Return(19));
-    EXPECT_CALL(pump, isCalibrated).WillRepeatedly(Return(true));
-    EXPECT_CALL(pump, on).Times(1);
-    app.loop();
-    EXPECT_CALL(s_m_sensor, readPercent).WillOnce(Return(21));
-    EXPECT_CALL(pump, isCalibrated).WillRepeatedly(Return(true));
-    EXPECT_CALL(pump, off).Times(1);
-    app.loop();
-}
+// TEST_F(ApplicationSimpleWateringFixture, TurnPumpOffWhenMoistureAboveThreshold)
+// {
+//     EXPECT_CALL(s_m_sensor, isCalibrated).WillRepeatedly(Return(true));
+//     EXPECT_CALL(s_m_sensor, readPercent).WillOnce(Return(19));
+//     EXPECT_CALL(pump, isCalibrated).WillRepeatedly(Return(true));
+//     EXPECT_CALL(pump, on).Times(1);
+//     app.loop();
+//     EXPECT_CALL(s_m_sensor, readPercent).WillOnce(Return(21));
+//     EXPECT_CALL(pump, isCalibrated).WillRepeatedly(Return(true));
+//     EXPECT_CALL(pump, off).Times(1);
+//     app.loop();
+// }
 
 TEST_F(ApplicationSimpleWateringFixture, DoNotWaterIfSensorNotCalibrated)
 {
@@ -157,4 +162,18 @@ TEST_F(ApplicationSimpleWateringFixture, CalibrateSMSensorWithParticularValues)
     EXPECT_CALL(s_m_sensor, readRaw).WillOnce(Return(100));
     EXPECT_CALL(s_m_sensor, calibrate(1, 100)).Times(1);
     app.loop();
+}
+
+TEST_F(ApplicationSimpleWateringFixture, TurnOffPumpAfterFixedTime)
+{
+    EXPECT_CALL(s_m_sensor, isCalibrated).WillRepeatedly(Return(true));
+    EXPECT_CALL(s_m_sensor, readPercent).WillOnce(Return(19));
+    EXPECT_CALL(pump, isCalibrated).WillRepeatedly(Return(true));
+    EXPECT_CALL(timeProvider, millis()).WillOnce(Return(1000));
+    EXPECT_CALL(pump, on).Times(1);
+    app.loop();
+    // EXPECT_CALL(s_m_sensor, readPercent).WillOnce(Return(21));
+    // EXPECT_CALL(pump, isCalibrated).WillRepeatedly(Return(true));
+    // EXPECT_CALL(pump, off).Times(1);
+    // app.loop();
 }

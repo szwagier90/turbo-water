@@ -4,6 +4,7 @@
 #include "ISerial.h"
 #include "ILcd.h"
 #include "IDelay.h"
+#include "ITimeProvider.h"
 #include "ISoilMoistureSensor.h"
 #include "IPump.h"
 #include "IButtonController.h"
@@ -15,6 +16,7 @@ public:
         ISerial& serial
         , ILcd& lcd
         , IDelay& delay
+        , ITimeProvider& timeProvider
         , ISoilMoistureSensor& s_m_sensor
         , IPump& pump
         , IButtonController& button
@@ -26,6 +28,7 @@ private:
     ISerial& serial;
     ILcd& lcd;
     IDelay& delay;
+    ITimeProvider& timeProvider;
     ISoilMoistureSensor& s_m_sensor;
     IPump& pump;
     IButtonController& button;
@@ -34,6 +37,7 @@ private:
     int dry;
     int wet;
 
+    bool wateringStatus;
 };
 
 #endif // APP_H

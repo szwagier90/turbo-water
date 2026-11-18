@@ -11,6 +11,7 @@
 #include "mocks/mock_serial.h"
 #include "mocks/mock_lcd.h"
 #include "mocks/mock_delay.h"
+#include "mocks/mock_time_provider.h"
 #include "mocks/mock_gpio.h"
 
 using ::testing::Return;
@@ -25,6 +26,7 @@ TEST(AppTest, PeripherialsInitialization)
     MockSerial serial;
     MockLcd lcd;
     MockDelay delay;
+    MockTimeProvider timeProvider;
     MockGpio sensorGpio;
     MockGpio pumpGpio;
     EXPECT_CALL(sensorGpio, pinMode);
@@ -38,6 +40,7 @@ TEST(AppTest, PeripherialsInitialization)
         serial
         , lcd
         , delay
+        , timeProvider
         , s_m_sensor
         , pump
         , button
@@ -71,6 +74,7 @@ protected:
     MockSerial serial;
     MockLcd lcd;
     MockDelay delay;
+    MockTimeProvider timeProvider;
     MockGpio sensorGpio;
     MockGpio pumpGpio;
     AnalogInput analogInput;
@@ -87,6 +91,7 @@ protected:
             serial
             , lcd
             , delay
+            , timeProvider
             , s_m_sensor
             , pump
             , button
@@ -168,6 +173,7 @@ protected:
     MockSerial serial;
     MockLcd lcd;
     MockDelay delay;
+    MockTimeProvider timeProvider;
     MockGpio sensorGpio;
     MockGpio pumpGpio;
     AnalogInput analogInput;
@@ -184,6 +190,7 @@ protected:
             serial
             , lcd
             , delay
+            , timeProvider
             , s_m_sensor
             , pump
             , button
@@ -203,4 +210,24 @@ TEST_F(AppBasicSetupCalibratedFixture, TurnWateringOnOnlyOnce)
 
     EXPECT_CALL(pumpGpio, digitalWrite(pumpGpioPin, PinOutput::High)).Times(0);
     app.loop();
+}
+
+TEST_F(AppBasicSetupCalibratedFixture, TurnOffPumpAfterFixedTime)
+{
+    EXPECT_CALL(sensorGpio, analogRead).WillOnce(Return(19));
+    EXPECT_CALL(timeProvider, millis()).WillOnce(Return(1000));
+    EXPECT_CALL(pumpGpio, digitalWrite(pumpGpioPin, PinOutput::High)).Times(1);
+    app.loop();
+
+    // EXPECT_CALL(sensorGpio, analogRead).WillOnce(Return(21));
+    EXPECT_CALL(timeProvider, millis()).WillOnce(Return(1200));
+    EXPECT_CALL(pumpGpio, digitalWrite(pumpGpioPin, PinOutput::Low)).Times(0);
+    app.loop();
+
+    EXPECT_CALL(timeProvider, millis()).WillOnce(Return(2001));
+    EXPECT_CALL(pumpGpio, digitalWrite(pumpGpioPin, PinOutput::Low)).Times(1);
+    app.loop();
+
+    // EXPECT_CALL(pumpGpio, digitalWrite(pumpGpioPin, PinOutput::High)).Times(0);
+    // app.loop();
 }
